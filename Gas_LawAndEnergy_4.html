@@ -1,0 +1,1447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Gas Laws Lab · Science Workshop I</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap');
+
+:root{
+  --ink:#1a1208;
+  --paper:#faf7f0;
+  --cream:#f2ede0;
+  --warm:#e8dcc8;
+  --border:#c8b89a;
+  --orange:#d4580a;
+  --orange-lt:#f5874a;
+  --blue:#1e4d8c;
+  --blue-lt:#3b7dd8;
+  --green:#1a6b3a;
+  --green-lt:#2ea05a;
+  --red:#b91c1c;
+  --yellow:#b45309;
+  --muted:#7a6a52;
+  --r:12px;
+  --shadow:0 2px 16px rgba(26,18,8,0.10);
+  --shadow-lg:0 6px 32px rgba(26,18,8,0.16);
+}
+
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html{scroll-behavior:smooth;}
+body{
+  font-family:'DM Sans',sans-serif;
+  background:var(--paper);
+  color:var(--ink);
+  min-height:100vh;
+  overflow-x:hidden;
+}
+
+/* ── TEXTURA DE FONDO ── */
+body::before{
+  content:'';
+  position:fixed;top:0;left:0;width:100%;height:100%;
+  background-image:
+    radial-gradient(circle at 20% 20%, rgba(212,88,10,0.04) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(30,77,140,0.04) 0%, transparent 50%);
+  pointer-events:none;z-index:0;
+}
+
+#app{position:relative;z-index:1;max-width:480px;margin:0 auto;padding-bottom:100px;}
+
+/* ── HEADER ── */
+.topbar{
+  background:var(--ink);
+  color:var(--paper);
+  padding:14px 18px 12px;
+  position:sticky;top:0;z-index:200;
+  border-bottom:3px solid var(--orange);
+}
+.topbar-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
+.course-tag{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:2px;color:var(--orange-lt);}
+.timer-wrap{display:flex;align-items:center;gap:6px;}
+.timer-dot{width:7px;height:7px;border-radius:50%;background:var(--green-lt);animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.3;}}
+#timer{font-family:'DM Mono',monospace;font-size:15px;font-weight:500;color:#fff;}
+.prog-row{display:flex;align-items:center;gap:10px;}
+.prog-track{flex:1;height:5px;background:rgba(255,255,255,0.15);border-radius:3px;overflow:hidden;}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--orange),var(--orange-lt));border-radius:3px;transition:width .6s ease;}
+.prog-pct{font-family:'DM Mono',monospace;font-size:11px;color:rgba(255,255,255,0.5);width:28px;text-align:right;}
+.section-name{font-size:11px;color:rgba(255,255,255,0.4);margin-top:4px;}
+
+/* ── SECTIONS ── */
+.sec{display:none;padding:20px 18px;animation:slideIn .35s ease;}
+.sec.active{display:block;}
+@keyframes slideIn{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
+
+/* ── TYPOGRAPHY ── */
+h1{font-family:'Syne',sans-serif;font-size:28px;font-weight:800;line-height:1.15;margin-bottom:8px;}
+h2{font-family:'Syne',sans-serif;font-size:20px;font-weight:700;margin-bottom:10px;}
+h3{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;margin-bottom:8px;}
+p{font-size:15px;line-height:1.7;color:#2d2010;}
+.mono{font-family:'DM Mono',monospace;}
+small{font-size:12px;color:var(--muted);}
+
+/* ── CARDS ── */
+.card{
+  background:#fff;
+  border:1.5px solid var(--warm);
+  border-radius:var(--r);
+  padding:18px;
+  margin-bottom:14px;
+  box-shadow:var(--shadow);
+}
+.card-orange{border-left:4px solid var(--orange);}
+.card-blue  {border-left:4px solid var(--blue);}
+.card-green {border-left:4px solid var(--green);}
+.card-red   {border-left:4px solid var(--red);}
+.card-yellow{border-left:4px solid var(--yellow);}
+
+/* ── LABELS ── */
+.label{
+  display:inline-block;font-family:'DM Mono',monospace;
+  font-size:9px;letter-spacing:2px;text-transform:uppercase;
+  padding:3px 9px;border-radius:20px;margin-bottom:10px;font-weight:500;
+}
+.label-orange{background:rgba(212,88,10,0.1);color:var(--orange);}
+.label-blue  {background:rgba(30,77,140,0.1); color:var(--blue);}
+.label-green {background:rgba(26,107,58,0.1); color:var(--green);}
+.label-red   {background:rgba(185,28,28,0.1); color:var(--red);}
+.label-muted {background:var(--warm);color:var(--muted);}
+
+/* ── TIME BADGE ── */
+.time-badge{
+  display:inline-flex;align-items:center;gap:5px;
+  background:var(--cream);border:1px solid var(--border);
+  border-radius:20px;padding:4px 10px;
+  font-size:12px;font-weight:500;color:var(--muted);
+  margin-bottom:14px;
+}
+
+/* ── BUTTONS ── */
+.btn{
+  display:block;width:100%;padding:15px;
+  border:none;border-radius:var(--r);
+  font-family:'Syne',sans-serif;font-size:16px;font-weight:700;
+  cursor:pointer;transition:all .18s;letter-spacing:.3px;
+}
+.btn-primary{background:var(--orange);color:#fff;}
+.btn-primary:hover{background:#b84808;transform:translateY(-1px);box-shadow:0 4px 16px rgba(212,88,10,0.3);}
+.btn-primary:disabled{background:var(--border);color:var(--muted);cursor:not-allowed;transform:none;box-shadow:none;}
+.btn-blue{background:var(--blue);color:#fff;}
+.btn-blue:hover{background:#163d72;}
+.btn-outline{background:transparent;border:2px solid var(--border);color:var(--ink);}
+.btn-outline:hover{border-color:var(--orange);color:var(--orange);}
+.btn-sm{padding:9px 16px;font-size:13px;width:auto;display:inline-block;}
+.btn-green{background:var(--green);color:#fff;}
+
+/* ── READING TEXT ── */
+.reading-body{
+  background:var(--cream);
+  border-radius:10px;padding:16px;margin:12px 0;
+  font-size:14px;line-height:1.8;color:#2d2010;
+  border:1px solid var(--warm);
+}
+.reading-body strong{color:var(--orange);font-weight:600;}
+.reading-body em{color:var(--blue);font-style:normal;font-weight:600;}
+
+/* ── INLINE QUESTIONS (blocking) ── */
+.inline-q{
+  background:#fff;border:2px solid var(--blue);
+  border-radius:10px;padding:14px;margin:14px 0;
+}
+.inline-q-label{font-size:10px;font-family:'DM Mono',monospace;letter-spacing:2px;color:var(--blue);margin-bottom:6px;}
+.inline-q p{font-size:14px;font-weight:500;margin-bottom:10px;}
+.inline-opts{display:flex;flex-direction:column;gap:8px;}
+.inline-opt{
+  background:var(--cream);border:1.5px solid var(--border);
+  border-radius:8px;padding:10px 12px;font-size:14px;
+  cursor:pointer;transition:all .15s;text-align:left;font-family:'DM Sans',sans-serif;
+}
+.inline-opt:hover{border-color:var(--blue);background:rgba(30,77,140,0.04);}
+.inline-opt.correct{border-color:var(--green);background:rgba(26,107,58,0.07);color:var(--green);pointer-events:none;}
+.inline-opt.wrong  {border-color:var(--red);  background:rgba(185,28,28,0.06); color:var(--red);  pointer-events:none;}
+.inline-opt.disabled{pointer-events:none;opacity:.6;}
+.inline-fb{
+  border-radius:8px;padding:11px 13px;margin-top:8px;
+  font-size:13px;line-height:1.6;display:none;font-weight:500;
+}
+.inline-fb.ok {background:rgba(26,107,58,0.07);color:var(--green);border:1px solid rgba(26,107,58,0.2);display:block;}
+.inline-fb.bad{background:rgba(185,28,28,0.06);color:var(--red);  border:1px solid rgba(185,28,28,0.2);display:block;}
+.continue-hint{
+  font-size:12px;color:var(--muted);text-align:center;
+  margin-top:8px;display:none;
+}
+.continue-hint.show{display:block;}
+
+/* ── LOCK GATE ── */
+.lock-gate{
+  background:linear-gradient(135deg,rgba(212,88,10,0.06),rgba(212,88,10,0.02));
+  border:2px dashed var(--orange);
+  border-radius:var(--r);padding:16px;text-align:center;
+  margin:14px 0;
+}
+.lock-icon{font-size:28px;margin-bottom:6px;}
+.lock-gate p{font-size:13px;color:var(--muted);}
+
+/* ── SIMULADORES ── */
+.sim-wrap{
+  background:var(--cream);border:1.5px solid var(--border);
+  border-radius:var(--r);padding:14px;margin:12px 0;
+}
+.sim-title{
+  font-family:'Syne',sans-serif;font-size:13px;font-weight:700;
+  color:var(--blue);margin-bottom:12px;text-align:center;letter-spacing:.5px;
+}
+canvas{border-radius:8px;display:block;width:100%;}
+.slider-row{margin:10px 0;}
+.slider-lbl{display:flex;justify-content:space-between;font-size:13px;font-weight:600;margin-bottom:5px;}
+.slider-lbl span:last-child{font-family:'DM Mono',monospace;color:var(--orange);}
+input[type=range]{width:100%;accent-color:var(--orange);height:6px;cursor:pointer;}
+.readout-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px;}
+.ro-cell{background:#fff;border-radius:8px;padding:9px;text-align:center;border:1px solid var(--warm);}
+.ro-lbl{font-size:10px;color:var(--muted);margin-bottom:2px;}
+.ro-val{font-family:'DM Mono',monospace;font-size:14px;font-weight:500;}
+
+/* ── MISSION BOX ── */
+.mission{
+  background:linear-gradient(135deg,#1e4d8c 0%,#163d72 100%);
+  border-radius:var(--r);padding:16px;margin:14px 0;color:#fff;
+}
+.mission-label{font-size:10px;letter-spacing:2px;font-family:'DM Mono',monospace;color:rgba(255,255,255,0.6);margin-bottom:6px;}
+.mission h4{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;margin-bottom:8px;}
+.mission p{font-size:13px;color:rgba(255,255,255,0.8);line-height:1.6;}
+.mission-status{
+  margin-top:12px;background:rgba(255,255,255,0.1);
+  border-radius:8px;padding:10px;font-family:'DM Mono',monospace;font-size:12px;
+  display:flex;align-items:center;gap:8px;
+}
+.mission-status .dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,0.3);flex-shrink:0;}
+.mission-status .dot.achieved{background:#4ade80;box-shadow:0 0 8px rgba(74,222,128,0.5);}
+.mission-status span{color:rgba(255,255,255,0.7);}
+
+/* ── PROBLEMA NUMÉRICO ── */
+.problem-box{
+  background:#fff;border:2px solid var(--ink);
+  border-radius:var(--r);padding:18px;margin:14px 0;
+}
+.problem-header{
+  background:var(--ink);color:#fff;
+  margin:-18px -18px 16px;padding:12px 18px;
+  border-radius:10px 10px 0 0;
+  font-family:'Syne',sans-serif;font-size:13px;font-weight:700;letter-spacing:.5px;
+}
+.given-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0;}
+.given-item{
+  background:var(--cream);border-radius:8px;padding:10px;
+  border:1px solid var(--border);text-align:center;
+}
+.given-sym{font-family:'DM Mono',monospace;font-size:18px;font-weight:500;color:var(--orange);}
+.given-lbl{font-size:11px;color:var(--muted);margin-top:2px;}
+.step-list{counter-reset:steps;margin:12px 0;}
+.step-item{
+  counter-increment:steps;display:flex;gap:10px;
+  margin-bottom:12px;align-items:flex-start;
+}
+.step-item::before{
+  content:counter(steps);
+  min-width:22px;height:22px;border-radius:50%;
+  background:var(--orange);color:#fff;
+  font-family:'DM Mono',monospace;font-size:11px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  margin-top:1px;
+}
+.step-item p{font-size:14px;line-height:1.6;}
+.formula-block{
+  background:var(--cream);border-radius:8px;padding:10px 14px;
+  font-family:'DM Mono',monospace;font-size:16px;font-weight:500;
+  text-align:center;margin:8px 0;border:1px solid var(--border);
+  color:var(--blue);
+}
+.answer-input-wrap{margin:12px 0;}
+.answer-input-wrap label{font-size:13px;font-weight:600;display:block;margin-bottom:5px;}
+.num-input-row{display:flex;gap:8px;align-items:center;}
+.num-input{
+  flex:1;background:var(--cream);border:2px solid var(--border);
+  border-radius:8px;padding:11px 12px;font-family:'DM Mono',monospace;
+  font-size:16px;color:var(--ink);outline:none;transition:border-color .15s;
+}
+.num-input:focus{border-color:var(--blue);}
+.num-unit{font-size:13px;color:var(--muted);font-weight:600;white-space:nowrap;}
+.check-btn{
+  background:var(--blue);color:#fff;border:none;border-radius:8px;
+  padding:11px 16px;font-family:'Syne',sans-serif;font-size:13px;
+  font-weight:700;cursor:pointer;transition:background .15s;white-space:nowrap;
+}
+.check-btn:hover{background:#163d72;}
+.answer-fb{
+  border-radius:8px;padding:11px 13px;margin-top:8px;
+  font-size:13px;line-height:1.6;display:none;font-weight:500;
+}
+.answer-fb.ok {background:rgba(26,107,58,0.07);color:var(--green);border:1px solid rgba(26,107,58,0.2);display:block;}
+.answer-fb.bad{background:rgba(185,28,28,0.06);color:var(--red);  border:1px solid rgba(185,28,28,0.2);display:block;}
+.answer-fb.hint{background:rgba(212,88,10,0.06);color:var(--orange);border:1px solid rgba(212,88,10,0.2);display:block;}
+
+/* ── NOTEBOOK ── */
+.notebook{
+  background:#fffef5;
+  border:1.5px solid #d4c98a;
+  border-radius:var(--r);padding:16px;margin:12px 0;
+  position:relative;
+}
+.notebook::before{
+  content:'';position:absolute;left:38px;top:0;bottom:0;
+  border-left:1.5px solid rgba(212,88,10,0.15);
+  pointer-events:none;
+}
+.nb-label{
+  font-family:'DM Mono',monospace;font-size:10px;letter-spacing:2px;
+  color:#b45309;margin-bottom:8px;display:flex;align-items:center;gap:6px;
+}
+textarea{
+  width:100%;background:transparent;border:none;outline:none;
+  font-family:'DM Sans',sans-serif;font-size:14px;color:var(--ink);
+  resize:none;line-height:1.8;padding-left:8px;
+  border-bottom:1px dashed var(--border);
+  padding-bottom:6px;margin-bottom:8px;
+}
+textarea::placeholder{color:#b0a080;font-style:italic;}
+.nb-hint{font-size:11px;color:var(--muted);margin-top:4px;}
+
+/* ── LAW CARD ── */
+.law-card{
+  background:linear-gradient(135deg,#1a1208 0%,#2d2010 100%);
+  border-radius:var(--r);padding:18px;margin:14px 0;color:#fff;
+}
+.law-name{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:3px;color:var(--orange-lt);margin-bottom:6px;}
+.law-formula{
+  font-family:'DM Mono',monospace;font-size:26px;font-weight:500;
+  color:#fff;text-align:center;padding:12px;
+  background:rgba(255,255,255,0.06);border-radius:8px;margin:10px 0;
+  border:1px solid rgba(255,255,255,0.1);
+}
+.law-plain{font-size:14px;color:rgba(255,255,255,0.75);line-height:1.6;}
+.law-example{
+  margin-top:10px;background:rgba(212,88,10,0.15);border-radius:8px;
+  padding:10px;font-size:13px;color:rgba(255,255,255,0.7);
+  border-left:3px solid var(--orange-lt);
+}
+
+/* ── QUIZ FINAL ── */
+.qz-dot{width:9px;height:9px;border-radius:50%;background:var(--warm);border:1px solid var(--border);}
+.qz-dot.ok {background:var(--green);}
+.qz-dot.bad{background:var(--red);}
+.qz-dot.cur{background:var(--orange);}
+.qz-dots{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:14px;}
+.qz-opt{
+  width:100%;background:var(--cream);border:2px solid var(--border);
+  border-radius:10px;padding:13px 14px;font-size:15px;
+  cursor:pointer;transition:all .15s;text-align:left;
+  font-family:'DM Sans',sans-serif;margin-bottom:8px;
+}
+.qz-opt:hover{border-color:var(--blue);background:rgba(30,77,140,0.04);}
+.qz-opt.correct{border-color:var(--green);background:rgba(26,107,58,0.07);color:var(--green);pointer-events:none;}
+.qz-opt.wrong  {border-color:var(--red);background:rgba(185,28,28,0.06);color:var(--red);pointer-events:none;}
+.qz-opt.disabled{pointer-events:none;opacity:.6;}
+.qz-fb{border-radius:8px;padding:12px;margin-top:4px;font-size:13px;line-height:1.6;font-weight:500;display:none;}
+.qz-fb.ok {background:rgba(26,107,58,0.07);color:var(--green);border:1px solid rgba(26,107,58,0.2);display:block;}
+.qz-fb.bad{background:rgba(185,28,28,0.06);color:var(--red);border:1px solid rgba(185,28,28,0.2);display:block;}
+
+/* ── SCORE ── */
+.score-circle{
+  width:100px;height:100px;border-radius:50%;
+  border:4px solid var(--orange);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  margin:0 auto 14px;
+  font-family:'DM Mono',monospace;
+}
+.score-big{font-size:26px;font-weight:500;}
+.score-sub{font-size:11px;color:var(--muted);}
+
+/* ── INTRO HERO ── */
+.hero{
+  background:var(--ink);color:#fff;
+  border-radius:var(--r);padding:24px 20px;
+  margin-bottom:18px;position:relative;overflow:hidden;
+}
+.hero::after{
+  content:'GAS';position:absolute;right:-10px;bottom:-20px;
+  font-family:'Syne',sans-serif;font-size:100px;font-weight:800;
+  color:rgba(255,255,255,0.03);line-height:1;pointer-events:none;
+}
+.hero-kicker{
+  font-family:'DM Mono',monospace;font-size:10px;letter-spacing:3px;
+  color:var(--orange-lt);margin-bottom:10px;
+}
+.pair-tag{
+  display:inline-flex;align-items:center;gap:6px;
+  background:rgba(212,88,10,0.2);border:1px solid rgba(212,88,10,0.3);
+  border-radius:20px;padding:5px 12px;
+  font-size:12px;font-weight:500;color:var(--orange-lt);margin-top:10px;
+}
+.unit-chain{display:flex;flex-direction:column;gap:0;}
+.chain-node{
+  background:#fff;border:1.5px solid var(--warm);
+  border-radius:8px;padding:11px 14px;font-size:13px;font-weight:600;
+}
+.chain-node.active{border-color:var(--orange);background:rgba(212,88,10,0.04);color:var(--orange);}
+.chain-arrow{text-align:center;color:var(--muted);font-size:16px;padding:3px 0;}
+
+/* ── BOTTOM NAV ── */
+.bot-nav{
+  position:fixed;bottom:0;left:0;right:0;z-index:300;
+  background:rgba(250,247,240,0.97);border-top:1.5px solid var(--border);
+  backdrop-filter:blur(12px);padding:10px 18px;
+  display:none;gap:10px;justify-content:space-between;align-items:center;
+  max-width:480px;margin:0 auto;
+}
+.bot-nav.visible{display:flex;}
+
+/* ── ANALOGY ── */
+.analogy-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0;}
+.analogy-item{
+  background:var(--cream);border-radius:10px;padding:14px;
+  border:1.5px solid var(--border);text-align:center;
+}
+.analogy-icon{font-size:32px;margin-bottom:6px;}
+.analogy-lbl{font-size:11px;font-weight:700;color:var(--muted);margin-bottom:3px;}
+.analogy-desc{font-size:12px;color:var(--ink);line-height:1.4;}
+
+/* ── REAL WORLD APP ── */
+.app-item{
+  display:flex;gap:12px;align-items:flex-start;
+  background:var(--cream);border-radius:10px;padding:14px;
+  margin-bottom:10px;border:1.5px solid var(--border);
+}
+.app-icon{font-size:32px;flex-shrink:0;}
+.app-body h4{font-size:14px;font-weight:700;margin-bottom:3px;}
+.app-body p {font-size:13px;color:var(--muted);line-height:1.5;}
+
+/* ── PARTNER TASK ── */
+.partner-task{
+  background:linear-gradient(135deg,rgba(26,107,58,0.06),rgba(26,107,58,0.02));
+  border:2px solid var(--green);border-radius:var(--r);padding:16px;margin:14px 0;
+}
+.pt-label{font-size:10px;font-family:'DM Mono',monospace;letter-spacing:2px;color:var(--green);margin-bottom:8px;}
+.pt-task{font-size:14px;line-height:1.7;}
+
+/* ── FINAL DESIGN ── */
+.design-field{margin-bottom:14px;}
+.design-field label{font-size:13px;font-weight:600;display:block;margin-bottom:5px;}
+.design-field textarea{
+  background:var(--cream);border:2px solid var(--border);
+  border-radius:8px;padding:11px 12px;width:100%;resize:none;
+  font-size:14px;color:var(--ink);outline:none;transition:border-color .15s;
+}
+.design-field textarea:focus{border-color:var(--orange);}
+
+/* ── TIP ── */
+.tip{
+  display:flex;gap:8px;align-items:flex-start;
+  background:rgba(180,83,9,0.06);border-radius:8px;
+  padding:11px 12px;margin:10px 0;font-size:13px;color:var(--yellow);
+  border-left:3px solid var(--yellow);
+}
+
+/* completion */
+.completion-hero{
+  background:linear-gradient(135deg,var(--green),#145a30);
+  color:#fff;border-radius:var(--r);padding:28px 20px;
+  text-align:center;margin-bottom:18px;
+}
+.completion-hero h1{color:#fff;}
+
+/* ── PROGRESS TRACKER SIDEBAR ── */
+.sec-list{display:flex;flex-direction:column;gap:8px;margin-bottom:18px;}
+.sec-row{
+  display:flex;align-items:center;gap:12px;
+  background:#fff;border:1.5px solid var(--warm);
+  border-radius:10px;padding:11px 14px;
+  font-size:14px;font-weight:600;
+}
+.sec-row .num{
+  width:26px;height:26px;border-radius:50%;
+  background:var(--warm);color:var(--muted);
+  font-family:'DM Mono',monospace;font-size:12px;
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;font-weight:500;
+}
+.sec-row.done .num{background:var(--green);color:#fff;}
+.sec-row .time-est{margin-left:auto;font-size:12px;color:var(--muted);font-weight:400;}
+
+/* ensure textarea in notebook doesn't have double styling */
+.notebook textarea{border:none;border-bottom:1px dashed var(--border);}
+.design-field textarea{border-radius:8px;}
+</style>
+</head>
+<body>
+
+<div id="app">
+
+<!-- ═══ TOPBAR ═══ -->
+<div class="topbar">
+  <div class="topbar-row">
+    <span class="course-tag">SCI WORKSHOP I · GAS LAWS</span>
+    <div class="timer-wrap">
+      <div class="timer-dot" id="tdot"></div>
+      <span id="timer">90:00</span>
+    </div>
+  </div>
+  <div class="prog-row">
+    <div class="prog-track"><div class="prog-fill" id="pfill" style="width:0%"></div></div>
+    <span class="prog-pct" id="ppct">0%</span>
+  </div>
+  <div class="section-name" id="sec-name">Introduction</div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     SEC 0 · INTRO
+══════════════════════════════════════════════ -->
+<div class="sec active" id="s0">
+
+  <div class="hero">
+    <div class="hero-kicker">SCIENCE WORKSHOP I · SEMESTER 2</div>
+    <h1>Gas Laws<br>Lab Activity</h1>
+    <p style="font-size:14px;color:rgba(255,255,255,0.6);margin-top:6px;">Pressure · Volume · Temperature</p>
+    <div class="pair-tag">👥 Work in pairs &nbsp;·&nbsp; ⏱ 90 minutes</div>
+  </div>
+
+  <div class="card card-orange">
+    <div class="label label-orange">Instructions</div>
+    <h3>How this works</h3>
+    <p style="font-size:14px;line-height:1.8;">
+      This activity has <strong>5 parts</strong>. You <strong>cannot skip</strong> — each section unlocks when you complete the tasks inside it.<br><br>
+      Read everything carefully. The questions in each section use what you just read, so don't rush past the text.
+    </p>
+  </div>
+
+  <div class="card">
+    <div class="label label-muted">Rules for pairs</div>
+    <p style="font-size:14px;line-height:1.9;">
+      📱 Each person has their own phone<br>
+      📓 Both partners copy notes to their <em>own</em> notebook<br>
+      🗣 Discuss answers before writing — talking is learning<br>
+      ⚠️ Do not move on until <em>both</em> of you understand
+    </p>
+  </div>
+
+  <div class="card card-blue">
+    <div class="label label-blue">Where are we?</div>
+    <div class="unit-chain">
+      <div class="chain-node">✅ Gas behavior &amp; properties</div>
+      <div class="chain-arrow">↓</div>
+      <div class="chain-node active">⚗ Gas Laws ← YOU ARE HERE</div>
+      <div class="chain-arrow">↓</div>
+      <div class="chain-node">🔜 Steam as a source of energy</div>
+    </div>
+  </div>
+
+  <div style="margin-bottom:14px;">
+    <div class="sec-list">
+      <div class="sec-row" id="srow-1"><div class="num">1</div><span>What is a gas?</span><span class="time-est">~15 min</span></div>
+      <div class="sec-row" id="srow-2"><div class="num">2</div><span>Boyle's Law + Simulation</span><span class="time-est">~20 min</span></div>
+      <div class="sec-row" id="srow-3"><div class="num">3</div><span>Charles's Law + Problems</span><span class="time-est">~20 min</span></div>
+      <div class="sec-row" id="srow-4"><div class="num">4</div><span>Gases in real life</span><span class="time-est">~15 min</span></div>
+      <div class="sec-row" id="srow-5"><div class="num">5</div><span>Quiz + Design task</span><span class="time-est">~20 min</span></div>
+    </div>
+  </div>
+
+  <button class="btn btn-primary" onclick="go(1)">Begin Part 1 →</button>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     SEC 1 · WHAT IS A GAS?
+══════════════════════════════════════════════ -->
+<div class="sec" id="s1">
+
+  <div class="time-badge">⏱ Estimated time: 15 minutes</div>
+  <div class="label label-orange">Part 1 of 5</div>
+  <h2>What is a gas?</h2>
+
+  <!-- READING 1 -->
+  <div class="card card-orange">
+    <div class="label label-orange">Reading · States of matter</div>
+    <div class="reading-body">
+      All matter is made of tiny <strong>particles</strong> (atoms and molecules) that are constantly moving. The way those particles are arranged and how fast they move determines whether something is a solid, liquid, or gas.<br><br>
+      In a <strong>solid</strong>, particles are packed tightly in a fixed pattern. They vibrate but don't move from their place — that's why solids have a definite shape and volume.<br><br>
+      In a <em>liquid</em>, particles are still close together but can slide past each other. Liquids have a fixed volume but take the shape of their container.<br><br>
+      In a <strong>gas</strong>, particles move very fast and are far apart. They have <strong>no fixed shape and no fixed volume</strong> — they spread out to completely fill whatever container they are in. Because of all that empty space between particles, gases can be compressed (squeezed) into a smaller volume.
+    </div>
+  </div>
+
+  <div class="inline-q" id="iq1">
+    <div class="inline-q-label">COMPREHENSION CHECK 1</div>
+    <p>Why can gases be compressed (squeezed) but solids cannot?</p>
+    <div class="inline-opts">
+      <button class="inline-opt" onclick="ansIQ('iq1',0,1)">A. Gas particles are heavier than solid particles</button>
+      <button class="inline-opt" onclick="ansIQ('iq1',1,1)">B. Gas particles are far apart, so there is empty space to compress them into</button>
+      <button class="inline-opt" onclick="ansIQ('iq1',2,1)">C. Gas particles do not move at all</button>
+      <button class="inline-opt" onclick="ansIQ('iq1',3,1)">D. Solid particles are made of a different material</button>
+    </div>
+    <div class="inline-fb" id="iq1-fb"></div>
+    <div class="continue-hint" id="iq1-hint">✅ Correct — keep reading ↓</div>
+  </div>
+
+  <!-- READING 2 -->
+  <div class="card" id="r1b" style="display:none;">
+    <div class="label label-muted">Reading · Gas particles and pressure</div>
+    <div class="reading-body">
+      Gas particles don't just float — they <strong>collide constantly</strong> with each other and with the walls of their container. Every collision pushes on the wall a tiny bit. The sum of all those tiny pushes creates what we call <strong>pressure</strong>.<br><br>
+      Think of a basketball: the air inside is hitting the rubber walls millions of times per second. All those tiny hits together create the pressure that keeps the ball inflated.<br><br>
+      Two things increase pressure:<br>
+      • <strong>More particles</strong> in the same space (more hits per second)<br>
+      • <strong>Smaller space</strong> for the same number of particles (particles hit walls more often because they don't have to travel as far)
+    </div>
+  </div>
+
+  <div class="inline-q" id="iq2" style="display:none;">
+    <div class="inline-q-label">COMPREHENSION CHECK 2</div>
+    <p>What happens to the pressure inside a container if you squeeze it smaller (but the number of gas particles stays the same)?</p>
+    <div class="inline-opts">
+      <button class="inline-opt" onclick="ansIQ('iq2',0,2)">A. Pressure decreases — particles have less room to move</button>
+      <button class="inline-opt" onclick="ansIQ('iq2',1,2)">B. Pressure stays the same — nothing has changed</button>
+      <button class="inline-opt" onclick="ansIQ('iq2',2,2)">C. Pressure increases — particles hit the walls more often</button>
+      <button class="inline-opt" onclick="ansIQ('iq2',3,2)">D. Pressure increases — particles become heavier</button>
+    </div>
+    <div class="inline-fb" id="iq2-fb"></div>
+    <div class="continue-hint" id="iq2-hint">✅ Keep going ↓</div>
+  </div>
+
+  <div id="r1c" style="display:none;">
+    <div class="notebook">
+      <div class="nb-label">📓 YOUR NOTEBOOK — copy both answers</div>
+      <p style="font-size:13px;color:var(--muted);margin-bottom:10px;">Write these definitions in your <em>own words</em> in your notebook:</p>
+      <textarea rows="2" id="nb1a" placeholder="Gas: a state of matter in which..." oninput="sv('nb1a')"></textarea>
+      <textarea rows="2" id="nb1b" placeholder="Pressure: the force created by..." oninput="sv('nb1b')"></textarea>
+      <div class="nb-hint">✍️ Both partners write in their own notebooks before continuing</div>
+    </div>
+
+    <div class="lock-gate" id="gate1">
+      <div class="lock-icon">🔒</div>
+      <p>Write at least 10 words in each notebook box above to unlock the next section.</p>
+    </div>
+
+    <button class="btn btn-primary" id="btn1" onclick="go(2)" disabled>Next: Boyle's Law →</button>
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════════════════
+     SEC 2 · BOYLE'S LAW
+══════════════════════════════════════════════ -->
+<div class="sec" id="s2">
+
+  <div class="time-badge">⏱ Estimated time: 20 minutes</div>
+  <div class="label label-blue">Part 2 of 5</div>
+  <h2>Boyle's Law: Pressure &amp; Volume</h2>
+
+  <div class="law-card">
+    <div class="law-name">BOYLE'S LAW · ROBERT BOYLE, 1662</div>
+    <div class="law-formula">P × V = constant (k)</div>
+    <div class="law-plain">
+      If the <strong>temperature stays the same</strong>, pressure and volume have an <em>inverse relationship</em>: when one goes up, the other goes down.
+    </div>
+    <div class="law-example">
+      📌 Squeeze the gas → volume ↓ → pressure ↑<br>
+      📌 Release the gas → volume ↑ → pressure ↓
+    </div>
+  </div>
+
+  <div class="card card-blue">
+    <div class="label label-blue">Reading · Why does this happen?</div>
+    <div class="reading-body">
+      Imagine you have 20 gas particles inside a box. The particles bounce around and hit the walls a certain number of times per second — let's say 100 hits per second total. That's your pressure.<br><br>
+      Now you squeeze the box to <strong>half its original size</strong>. You still have 20 particles, but now they travel a shorter distance before hitting a wall. They hit the walls <strong>twice as often</strong> — now 200 hits per second. Pressure <strong>doubled</strong>.<br><br>
+      This is Boyle's Law in action: <strong>halve the volume → double the pressure</strong>. The math works perfectly: P × V always gives the same number (as long as temperature doesn't change).
+    </div>
+  </div>
+
+  <!-- SIMULATION: PISTON -->
+  <div class="sim-wrap">
+    <div class="sim-title">🔬 PISTON SIMULATOR · Boyle's Law</div>
+    <canvas id="c2" height="130"></canvas>
+    <div class="slider-row">
+      <div class="slider-lbl"><span>⬅ Volume (move piston)</span><span id="s2v">100 %</span></div>
+      <input type="range" id="sl2" min="25" max="100" value="100" oninput="simBoyle(this.value)">
+    </div>
+    <div class="readout-grid">
+      <div class="ro-cell"><div class="ro-lbl">Volume</div><div class="ro-val" id="r2v" style="color:var(--blue)">100%</div></div>
+      <div class="ro-cell"><div class="ro-lbl">Pressure</div><div class="ro-val" id="r2p" style="color:var(--orange)">1.0×</div></div>
+      <div class="ro-cell"><div class="ro-lbl">P × V</div><div class="ro-val" id="r2pv" style="color:var(--green)">100</div></div>
+    </div>
+  </div>
+
+  <!-- MISSION 1 -->
+  <div class="mission" id="m2">
+    <div class="mission-label">MISSION · REQUIRED TO CONTINUE</div>
+    <h4>🎯 Find the relationship</h4>
+    <p>Move the piston slider. When volume reaches <strong>50%</strong>, observe the pressure value. Then drag it to <strong>25%</strong> and check again.</p>
+    <div class="mission-status" id="m2-status">
+      <div class="dot" id="m2d1"></div><span id="m2t1">Volume at 50% not yet reached</span>
+    </div>
+    <div class="mission-status" id="m2-status2">
+      <div class="dot" id="m2d2"></div><span id="m2t2">Volume at 25% not yet reached</span>
+    </div>
+  </div>
+
+  <div id="s2-after" style="display:none;">
+    <div class="inline-q" id="iq3">
+      <div class="inline-q-label">CHECK: What did you find?</div>
+      <p>When volume went from 100% → 50%, what happened to pressure?</p>
+      <div class="inline-opts">
+        <button class="inline-opt" onclick="ansIQ('iq3',0,3)">A. It stayed the same</button>
+        <button class="inline-opt" onclick="ansIQ('iq3',1,3)">B. It doubled (×2)</button>
+        <button class="inline-opt" onclick="ansIQ('iq3',2,3)">C. It halved (÷2)</button>
+        <button class="inline-opt" onclick="ansIQ('iq3',3,3)">D. It tripled (×3)</button>
+      </div>
+      <div class="inline-fb" id="iq3-fb"></div>
+    </div>
+
+    <!-- NUMERICAL PROBLEM 1 -->
+    <div class="problem-box" id="p2-prob" style="display:none;">
+      <div class="problem-header">⚙ PROBLEM 1 · Boyle's Law</div>
+      <p style="font-size:14px;margin-bottom:12px;">A sealed syringe contains gas at <strong>1 atm</strong> of pressure and a volume of <strong>60 mL</strong>. You push the plunger until the volume is <strong>20 mL</strong>. What is the new pressure? (Temperature stays the same.)</p>
+      <div class="given-grid">
+        <div class="given-item"><div class="given-sym">P₁ = 1 atm</div><div class="given-lbl">Initial pressure</div></div>
+        <div class="given-item"><div class="given-sym">V₁ = 60 mL</div><div class="given-lbl">Initial volume</div></div>
+        <div class="given-item"><div class="given-sym">V₂ = 20 mL</div><div class="given-lbl">Final volume</div></div>
+        <div class="given-item"><div class="given-sym">P₂ = ?</div><div class="given-lbl">Find this</div></div>
+      </div>
+      <div class="step-list">
+        <div class="step-item"><p>Write Boyle's Law: <span class="mono" style="background:var(--cream);padding:2px 6px;border-radius:4px;">P₁ × V₁ = P₂ × V₂</span></p></div>
+        <div class="step-item"><p>Substitute values: <span class="mono" style="background:var(--cream);padding:2px 6px;border-radius:4px;">1 × 60 = P₂ × 20</span></p></div>
+        <div class="step-item"><p>Solve: <span class="mono" style="background:var(--cream);padding:2px 6px;border-radius:4px;">P₂ = 60 ÷ 20 = ?</span></p></div>
+      </div>
+      <div class="answer-input-wrap">
+        <label>Your answer for P₂:</label>
+        <div class="num-input-row">
+          <input class="num-input" type="number" id="p1ans" placeholder="e.g. 3">
+          <span class="num-unit">atm</span>
+          <button class="check-btn" onclick="checkNum('p1ans',3,0.1,'p1fb','p1-next')">Check</button>
+        </div>
+        <div class="answer-fb" id="p1fb"></div>
+      </div>
+    </div>
+
+    <div id="p1-next" style="display:none;">
+      <div class="notebook">
+        <div class="nb-label">📓 NOTEBOOK · Boyle's Law</div>
+        <textarea rows="2" id="nb2a" placeholder="Boyle's Law states that when volume decreases, pressure..." oninput="sv('nb2a')"></textarea>
+        <textarea rows="2" id="nb2b" placeholder="In the syringe problem, I found P₂ = ___ because..." oninput="sv('nb2b')"></textarea>
+        <textarea rows="2" id="nb2c" placeholder="A real-life example of Boyle's Law is..." oninput="sv('nb2c')"></textarea>
+        <div class="nb-hint">✍️ Both partners write in their notebooks</div>
+      </div>
+      <button class="btn btn-primary" id="btn2" onclick="go(3)">Next: Charles's Law →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     SEC 3 · CHARLES'S LAW
+══════════════════════════════════════════════ -->
+<div class="sec" id="s3">
+
+  <div class="time-badge">⏱ Estimated time: 20 minutes</div>
+  <div class="label label-green">Part 3 of 5</div>
+  <h2>Charles's Law: Volume &amp; Temperature</h2>
+
+  <div class="law-card">
+    <div class="law-name">CHARLES'S LAW · JACQUES CHARLES, 1787</div>
+    <div class="law-formula">V / T = constant (k)</div>
+    <div class="law-plain">
+      If <strong>pressure stays the same</strong>, volume and temperature have a <em>direct relationship</em>: when one goes up, the other goes up too.
+    </div>
+    <div class="law-example">
+      📌 Heat the gas → particles move faster → gas expands → volume ↑<br>
+      📌 Cool the gas → particles slow down → gas shrinks → volume ↓
+    </div>
+  </div>
+
+  <div class="card card-green">
+    <div class="label label-green">Reading · Temperature and particle speed</div>
+    <div class="reading-body">
+      Temperature is a measure of how fast particles are moving. <strong>Hot = fast particles. Cold = slow particles.</strong><br><br>
+      When you heat a gas, particles gain energy and move faster. They hit the walls harder and more often. If the container can expand (like a balloon), it <strong>grows</strong> to keep the pressure the same. If the container is rigid (like a sealed metal tank), the pressure rises instead.<br><br>
+      In Charles's Law, we assume the container <strong>can expand</strong> (pressure stays constant). So heating → expansion, cooling → contraction.<br><br>
+      Important: temperature must be in <strong>Kelvin (K)</strong> for the math to work.<br>
+      Formula to convert: <strong>K = °C + 273</strong>
+    </div>
+  </div>
+
+  <div class="inline-q" id="iq4">
+    <div class="inline-q-label">COMPREHENSION CHECK</div>
+    <p>A balloon is left in a hot car on a summer day. According to Charles's Law, what will happen to the balloon?</p>
+    <div class="inline-opts">
+      <button class="inline-opt" onclick="ansIQ('iq4',0,4)">A. It will shrink because heat makes things smaller</button>
+      <button class="inline-opt" onclick="ansIQ('iq4',1,4)">B. It will expand because higher temperature increases volume</button>
+      <button class="inline-opt" onclick="ansIQ('iq4',2,4)">C. Nothing will happen — temperature doesn't affect gases</button>
+      <button class="inline-opt" onclick="ansIQ('iq4',3,4)">D. It will pop immediately</button>
+    </div>
+    <div class="inline-fb" id="iq4-fb"></div>
+    <div class="continue-hint" id="iq4-hint">↓</div>
+  </div>
+
+  <!-- BALLOON SIMULATOR -->
+  <div class="sim-wrap" id="s3-sim" style="display:none;">
+    <div class="sim-title">🌡️ BALLOON SIMULATOR · Charles's Law</div>
+    <canvas id="c3" height="120"></canvas>
+    <div class="slider-row">
+      <div class="slider-lbl"><span>🌡 Temperature</span><span id="s3t">20 °C</span></div>
+      <input type="range" id="sl3" min="-50" max="200" value="20" oninput="simCharles(this.value)">
+    </div>
+    <div class="readout-grid">
+      <div class="ro-cell"><div class="ro-lbl">°C</div><div class="ro-val" id="r3c" style="color:var(--orange)">20</div></div>
+      <div class="ro-cell"><div class="ro-lbl">Kelvin</div><div class="ro-val" id="r3k" style="color:var(--blue)">293 K</div></div>
+      <div class="ro-cell"><div class="ro-lbl">Volume</div><div class="ro-val" id="r3v" style="color:var(--green)">100%</div></div>
+    </div>
+  </div>
+
+  <!-- MISSION 2 -->
+  <div class="mission" id="m3" style="display:none;">
+    <div class="mission-label">MISSION · REQUIRED TO CONTINUE</div>
+    <h4>🎯 Explore Charles's Law</h4>
+    <p>Drag the temperature slider to at least <strong>100°C</strong>, then drag it to at least <strong>−20°C</strong>. Watch the balloon volume change.</p>
+    <div class="mission-status">
+      <div class="dot" id="m3d1"></div><span id="m3t1">Reach 100°C: not done yet</span>
+    </div>
+    <div class="mission-status">
+      <div class="dot" id="m3d2"></div><span id="m3t2">Reach −20°C: not done yet</span>
+    </div>
+  </div>
+
+  <!-- NUMERICAL PROBLEM 2 -->
+  <div id="s3-prob" style="display:none;">
+    <div class="problem-box">
+      <div class="problem-header">⚙ PROBLEM 2 · Charles's Law (with Kelvin conversion)</div>
+      <p style="font-size:14px;margin-bottom:12px;">A gas occupies <strong>3 L</strong> at <strong>27°C</strong>. You heat it to <strong>127°C</strong> at constant pressure. What is the new volume?</p>
+      <div class="given-grid">
+        <div class="given-item"><div class="given-sym">V₁ = 3 L</div><div class="given-lbl">Initial volume</div></div>
+        <div class="given-item"><div class="given-sym">T₁ = 27°C</div><div class="given-lbl">= 300 K</div></div>
+        <div class="given-item"><div class="given-sym">T₂ = 127°C</div><div class="given-lbl">= 400 K</div></div>
+        <div class="given-item"><div class="given-sym">V₂ = ?</div><div class="given-lbl">Find this</div></div>
+      </div>
+      <div class="step-list">
+        <div class="step-item"><p>Convert to Kelvin: <span class="mono" style="background:var(--cream);padding:2px 6px;border-radius:4px;">T = °C + 273</span><br>T₁ = 27 + 273 = <strong>300 K</strong> &nbsp; T₂ = 127 + 273 = <strong>400 K</strong></p></div>
+        <div class="step-item"><p>Write Charles's Law: <span class="mono" style="background:var(--cream);padding:2px 6px;border-radius:4px;">V₁/T₁ = V₂/T₂</span></p></div>
+        <div class="step-item"><p>Rearrange: <span class="mono" style="background:var(--cream);padding:2px 6px;border-radius:4px;">V₂ = V₁ × (T₂/T₁) = 3 × (400/300)</span></p></div>
+        <div class="step-item"><p>Calculate: <span class="mono" style="background:var(--cream);padding:2px 6px;border-radius:4px;">V₂ = 3 × 1.333... = ?</span></p></div>
+      </div>
+      <div class="answer-input-wrap">
+        <label>Your answer for V₂ (round to 1 decimal):</label>
+        <div class="num-input-row">
+          <input class="num-input" type="number" step="0.1" id="p2ans" placeholder="e.g. 4.0">
+          <span class="num-unit">L</span>
+          <button class="check-btn" onclick="checkNum('p2ans',4,0.05,'p2fb','p2-next')">Check</button>
+        </div>
+        <div class="answer-fb" id="p2fb"></div>
+      </div>
+    </div>
+
+    <!-- PROBLEM 3 (bonus/slightly harder) -->
+    <div class="problem-box" id="p2-next" style="display:none;">
+      <div class="problem-header">⚙ PROBLEM 3 · Find the temperature</div>
+      <p style="font-size:14px;margin-bottom:12px;">A gas has a volume of <strong>2 L</strong> at <strong>300 K</strong>. At what temperature (in Kelvin) will the volume be <strong>1 L</strong>? (Pressure constant.)</p>
+      <div class="given-grid">
+        <div class="given-item"><div class="given-sym">V₁ = 2 L</div><div class="given-lbl"></div></div>
+        <div class="given-item"><div class="given-sym">T₁ = 300 K</div><div class="given-lbl"></div></div>
+        <div class="given-item"><div class="given-sym">V₂ = 1 L</div><div class="given-lbl"></div></div>
+        <div class="given-item"><div class="given-sym">T₂ = ?</div><div class="given-lbl">Find this</div></div>
+      </div>
+      <div class="tip">💡 Rearrange V₁/T₁ = V₂/T₂ to solve for T₂: T₂ = T₁ × (V₂/V₁)</div>
+      <div class="answer-input-wrap">
+        <label>Your answer for T₂:</label>
+        <div class="num-input-row">
+          <input class="num-input" type="number" id="p3ans" placeholder="e.g. 150">
+          <span class="num-unit">K</span>
+          <button class="check-btn" onclick="checkNum('p3ans',150,1,'p3fb','p3-next')">Check</button>
+        </div>
+        <div class="answer-fb" id="p3fb"></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="p3-next" style="display:none;">
+    <div class="notebook">
+      <div class="nb-label">📓 NOTEBOOK · Charles's Law</div>
+      <textarea rows="2" id="nb3a" placeholder="Charles's Law states that when temperature increases, volume..." oninput="sv('nb3a')"></textarea>
+      <textarea rows="2" id="nb3b" placeholder="We must use Kelvin because..." oninput="sv('nb3b')"></textarea>
+      <textarea rows="2" id="nb3c" placeholder="In Problem 3, the gas cooled to 150 K. That means in °C it would be..." oninput="sv('nb3c')"></textarea>
+      <div class="nb-hint">✍️ Both partners write</div>
+    </div>
+    <button class="btn btn-primary" onclick="go(4)">Next: Real Life →</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     SEC 4 · REAL LIFE + PARTNER TASK
+══════════════════════════════════════════════ -->
+<div class="sec" id="s4">
+
+  <div class="time-badge">⏱ Estimated time: 15 minutes</div>
+  <div class="label label-muted">Part 4 of 5</div>
+  <h2>Gases in technology &amp; daily life</h2>
+
+  <div class="card">
+    <div class="label label-orange">Reading · 5 applications</div>
+    <div class="reading-body">
+      Gas laws aren't just theory — engineers use them constantly to design technology that helps people. Here are five examples. Read each one carefully; you will use them in a partner task below.
+    </div>
+  </div>
+
+  <div class="app-item">
+    <div class="app-icon">💉</div>
+    <div class="app-body">
+      <h4>Medical syringes</h4>
+      <p>Pulling the plunger back increases the volume inside the syringe, which drops the pressure. The higher outside pressure then pushes the liquid in. <strong>Boyle's Law</strong>.</p>
+    </div>
+  </div>
+  <div class="app-item">
+    <div class="app-icon">🚲</div>
+    <div class="app-body">
+      <h4>Bicycle tires on a hot day</h4>
+      <p>When the temperature rises, the air inside a tire expands. Since the tire can't stretch much, pressure increases. Dangerously over-inflated tires on hot days: <strong>Charles's Law</strong>.</p>
+    </div>
+  </div>
+  <div class="app-item">
+    <div class="app-icon">🔥</div>
+    <div class="app-body">
+      <h4>Fire extinguishers</h4>
+      <p>CO₂ is compressed at very high pressure into a small tank (Boyle's Law). When the valve opens, the gas expands rapidly, cooling and smothering fires.</p>
+    </div>
+  </div>
+  <div class="app-item">
+    <div class="app-icon">🎈</div>
+    <div class="app-body">
+      <h4>Hot air balloons</h4>
+      <p>Heating the air inside the balloon makes it expand (Charles's Law). The expanded hot air is less dense than the cooler air outside, so the balloon rises.</p>
+    </div>
+  </div>
+  <div class="app-item" style="border-color:var(--orange);background:rgba(212,88,10,0.03);">
+    <div class="app-icon">♨️</div>
+    <div class="app-body">
+      <h4>Steam power plants (next unit!)</h4>
+      <p>Water is heated to create steam — a gas at high temperature and pressure. The expanding steam pushes turbine blades to generate electricity. Both Boyle's and Charles's Laws apply.</p>
+    </div>
+  </div>
+
+  <div class="partner-task">
+    <div class="pt-label">👥 PARTNER TASK — both partners discuss before writing</div>
+    <div class="pt-task">
+      Choose <strong>two</strong> applications from the list above (they must be different ones). For each one, answer: Which gas law does it use? What changes — pressure, volume, or temperature? How does it help people?
+    </div>
+  </div>
+
+  <div class="notebook">
+    <div class="nb-label">📓 NOTEBOOK — Partner Task answers</div>
+    <textarea rows="3" id="nb4a" placeholder="Application 1: [name]. It uses ___ Law because when ___, the ___ changes. It helps people by..." oninput="sv('nb4a')"></textarea>
+    <textarea rows="3" id="nb4b" placeholder="Application 2: [name]. It uses ___ Law because when ___, the ___ changes. It helps people by..." oninput="sv('nb4b')"></textarea>
+    <textarea rows="2" id="nb4c" placeholder="Connection to steam energy: Steam works like ___ because..." oninput="sv('nb4c')"></textarea>
+    <div class="nb-hint">✍️ Both partners write — minimum 3 complete sentences each</div>
+  </div>
+
+  <div class="lock-gate" id="gate4">
+    <div class="lock-icon">🔒</div>
+    <p>Write at least 15 words in each notebook box to unlock the quiz.</p>
+  </div>
+
+  <button class="btn btn-primary" id="btn4" onclick="go(5)" disabled>Next: Quiz →</button>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     SEC 5 · QUIZ + DESIGN TASK
+══════════════════════════════════════════════ -->
+<div class="sec" id="s5">
+
+  <div class="time-badge">⏱ Estimated time: 20 minutes</div>
+  <div class="label label-red">Part 5 of 5</div>
+  <h2>Final Quiz</h2>
+
+  <div class="card card-red" style="margin-bottom:14px;">
+    <p style="font-size:14px;">10 questions. Answer <strong>on your own</strong> first — then compare with your partner. Discuss any that you answered differently.</p>
+  </div>
+
+  <div class="qz-dots" id="qz-dots"></div>
+
+  <div id="qz-area">
+    <div style="font-size:11px;font-family:'DM Mono',monospace;color:var(--muted);margin-bottom:6px;" id="ql-lbl">QUESTION 1 OF 10</div>
+    <div style="font-size:17px;font-weight:600;line-height:1.5;margin-bottom:14px;" id="ql-text"></div>
+    <div id="ql-opts"></div>
+    <div class="qz-fb" id="ql-fb"></div>
+    <button class="btn btn-outline" style="margin-top:12px;display:none;" id="qz-next" onclick="nextQ()">Next question →</button>
+  </div>
+
+  <div id="qz-result" style="display:none;">
+    <div class="card" style="text-align:center;padding:24px;">
+      <div class="score-circle" id="sc-ring">
+        <div class="score-big" id="sc-big"></div>
+        <div class="score-sub">out of 10</div>
+      </div>
+      <h2 id="sc-title" style="margin-bottom:6px;"></h2>
+      <p id="sc-msg" style="font-size:14px;color:var(--muted);"></p>
+    </div>
+
+    <div class="card card-green" id="design-section" style="display:none;">
+      <div class="label label-green">Bonus Design Task</div>
+      <h3>🛠 Design a gas-powered device</h3>
+      <p style="font-size:14px;margin-bottom:14px;">Use what you learned to design a device (real or imaginary) that uses at least one gas law. Work with your partner — both of you write the final design in your notebook.</p>
+      <div class="design-field">
+        <label>Device name &amp; what it does:</label>
+        <textarea id="d1" rows="2" placeholder="Our device is called... It works by..." oninput="sv('d1')"></textarea>
+      </div>
+      <div class="design-field">
+        <label>Which law(s) does it use? How?</label>
+        <textarea id="d2" rows="2" placeholder="It uses ___ Law because when ___, the ___ changes..." oninput="sv('d2')"></textarea>
+      </div>
+      <div class="design-field">
+        <label>How does it connect to steam energy?</label>
+        <textarea id="d3" rows="2" placeholder="A steam engine does something similar because..." oninput="sv('d3')"></textarea>
+      </div>
+    </div>
+
+    <button class="btn btn-outline" style="margin-bottom:10px;" onclick="retakeQ()">🔄 Retake Quiz</button>
+    <button class="btn btn-primary" id="finish-btn" onclick="go(6)" style="display:none;">🎉 Finish Activity</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     SEC 6 · COMPLETION
+══════════════════════════════════════════════ -->
+<div class="sec" id="s6">
+
+  <div class="completion-hero">
+    <div style="font-size:48px;margin-bottom:8px;">🏆</div>
+    <div class="label" style="background:rgba(255,255,255,0.15);color:#fff;">ACTIVITY COMPLETE</div>
+    <h1>Well done!</h1>
+    <p style="color:rgba(255,255,255,0.8);margin-top:6px;font-size:15px;">You finished all 5 parts of the Gas Laws Lab.</p>
+  </div>
+
+  <div class="card card-orange">
+    <h3>✅ Summary: What you learned</h3>
+    <p style="font-size:14px;line-height:1.9;">
+      <strong>Gases:</strong> particles far apart, move freely, fill containers<br>
+      <strong>Pressure:</strong> caused by particle collisions with walls<br>
+      <strong>Boyle's Law:</strong> P × V = k (inverse relationship)<br>
+      <strong>Charles's Law:</strong> V / T = k (direct relationship, use Kelvin)<br>
+      <strong>Connection:</strong> steam is a gas — it uses these same laws to generate electricity
+    </p>
+  </div>
+
+  <div class="card card-blue">
+    <h3>🔜 Coming next: Steam Energy</h3>
+    <p style="font-size:14px;">In the next unit you'll see exactly how water becomes steam, how steam pressure drives turbines, and why this still powers most of the world's electricity today.</p>
+  </div>
+
+  <div class="notebook">
+    <div class="nb-label">📓 FINAL NOTEBOOK ENTRY</div>
+    <textarea rows="2" id="nbf1" placeholder="The most important thing I learned today was..." oninput="sv('nbf1')"></textarea>
+    <textarea rows="2" id="nbf2" placeholder="Gas laws connect to steam energy because..." oninput="sv('nbf2')"></textarea>
+    <textarea rows="2" id="nbf3" placeholder="One question I still have is..." oninput="sv('nbf3')"></textarea>
+  </div>
+
+  <div class="card" style="text-align:center;padding:20px;">
+    <p style="font-size:14px;color:var(--muted);">Show your completed notebook to your teacher. ✍️<br>Make sure both partners have written all their notes.</p>
+  </div>
+
+</div><!-- /s6 -->
+
+</div><!-- /app -->
+
+<div class="bot-nav" id="botnav">
+  <button class="btn btn-outline btn-sm" onclick="goBack()">← Back</button>
+  <button class="btn btn-primary btn-sm" onclick="goFwd()" id="fwdbtn" style="display:none">Forward →</button>
+</div>
+
+<script>
+// ══════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════
+let cur = 0;
+const SNAMES = ['Intro','Part 1: What is a gas?','Part 2: Boyle\'s Law','Part 3: Charles\'s Law','Part 4: Real Life','Part 5: Quiz','Complete'];
+const iqCorrect = {}; // which inline questions answered correctly
+let m2_50done=false, m2_25done=false, m3_hot=false, m3_cold=false;
+let qIdx=0, qScore=0, qAnswers=[];
+
+// ══════════════════════════════════════════
+// TIMER
+// ══════════════════════════════════════════
+let sec=90*60;
+const timerEl=document.getElementById('timer');
+const tdot=document.getElementById('tdot');
+setInterval(()=>{
+  if(sec<=0){timerEl.textContent='00:00';timerEl.style.color='#ef4444';tdot.style.background='#ef4444';return;}
+  sec--;
+  const m=Math.floor(sec/60),s=sec%60;
+  timerEl.textContent=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+  if(sec<600){timerEl.style.color='#ef4444';tdot.style.background='#ef4444';}
+  else if(sec<1800){timerEl.style.color='#f59e0b';}
+},1000);
+
+// ══════════════════════════════════════════
+// NAVIGATION
+// ══════════════════════════════════════════
+function go(n){
+  document.getElementById(`s${cur}`).classList.remove('active');
+  cur=n;
+  document.getElementById(`s${n}`).classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+  updateProg();
+  document.getElementById('botnav').classList.toggle('visible',n>0);
+  document.getElementById('sec-name').textContent=SNAMES[n];
+  if(n===2) setTimeout(initBoyle,80);
+  if(n===3) setTimeout(initCharles,80);
+  if(n===5) initQuiz();
+  markSrow(n);
+}
+function goBack(){if(cur>0) go(cur-1);}
+function goFwd() {if(cur<6) go(cur+1);}
+function updateProg(){
+  const p=Math.round(cur/6*100);
+  document.getElementById('pfill').style.width=p+'%';
+  document.getElementById('ppct').textContent=p+'%';
+}
+function markSrow(n){
+  for(let i=1;i<=5;i++){
+    const row=document.getElementById(`srow-${i}`);
+    if(!row)continue;
+    row.classList.toggle('done',i<n);
+  }
+}
+
+// ══════════════════════════════════════════
+// INLINE QUESTIONS
+// Correct answer index per question id
+// ══════════════════════════════════════════
+const IQ_CORRECT={iq1:1,iq2:2,iq3:1,iq4:1};
+const IQ_FB={
+  iq1:{
+    ok:'✅ Correct! Gas particles have a lot of empty space between them, so they can be pushed closer together. Solid particles are already packed tightly.',
+    bad:'❌ Think about the space between particles. In a gas, particles are far apart — that empty space is what gets compressed.'
+  },
+  iq2:{
+    ok:'✅ Exactly! Less space → particles travel shorter distances → they hit the walls more often → higher pressure.',
+    bad:'❌ Smaller space = more frequent collisions with walls = higher pressure. Think of the bouncing people analogy.'
+  },
+  iq3:{
+    ok:'✅ Right! Pressure doubled. P×V always gives the same number: 1×100=100, and 2.0×50=100. That\'s Boyle\'s Law!',
+    bad:'❌ Check the simulator readout again. When volume halved (100%→50%), pressure exactly doubled. That\'s the inverse relationship.'
+  },
+  iq4:{
+    ok:'✅ Correct! Higher temperature → faster particles → more expansion → larger volume. The balloon grows in the heat (Charles\'s Law).',
+    bad:'❌ According to Charles\'s Law, higher temperature means larger volume. Hot particles move faster and push the balloon walls outward.'
+  }
+};
+
+function ansIQ(qid, chosen, revealNext){
+  const correct=IQ_CORRECT[qid];
+  const btns=document.querySelectorAll(`#${qid} .inline-opt`);
+  btns.forEach(b=>b.classList.add('disabled'));
+  btns[correct].classList.add('correct');
+  const fb=document.getElementById(`${qid}-fb`);
+  const isOk=chosen===correct;
+  if(!isOk) btns[chosen].classList.add('wrong');
+  fb.className='inline-fb '+(isOk?'ok':'bad');
+  fb.textContent=isOk?IQ_FB[qid].ok:IQ_FB[qid].bad;
+  iqCorrect[qid]=isOk;
+  // show next
+  if(revealNext===1&&isOk){
+    document.getElementById('r1b').style.display='block';
+    document.getElementById('iq2').style.display='block';
+    const h=document.getElementById('iq1-hint');if(h)h.classList.add('show');
+  } else if(revealNext===2){
+    document.getElementById('r1c').style.display='block';
+    watchNotes1();
+    const h=document.getElementById('iq2-hint');if(h)h.classList.add('show');
+  } else if(revealNext===3&&isOk){
+    document.getElementById('p2-prob').style.display='block';
+  } else if(revealNext===4&&isOk){
+    document.getElementById('s3-sim').style.display='block';
+    document.getElementById('m3').style.display='block';
+    initCharles();
+    const h=document.getElementById('iq4-hint');if(h)h.classList.add('show');
+  }
+}
+
+// ══════════════════════════════════════════
+// NOTEBOOK GATES
+// ══════════════════════════════════════════
+function sv(id){
+  try{localStorage.setItem('gl_'+id,document.getElementById(id).value);}catch(e){}
+  if(id==='nb1a'||id==='nb1b') watchNotes1();
+  if(id==='nb4a'||id==='nb4b'||id==='nb4c') watchNotes4();
+}
+function ld(id){try{const v=localStorage.getItem('gl_'+id);if(v&&document.getElementById(id))document.getElementById(id).value=v;}catch(e){}}
+function loadAll(){['nb1a','nb1b','nb2a','nb2b','nb2c','nb3a','nb3b','nb3c','nb4a','nb4b','nb4c','nbf1','nbf2','nbf3','d1','d2','d3'].forEach(ld);}
+loadAll();
+
+function watchNotes1(){
+  const a=document.getElementById('nb1a')?.value||'';
+  const b=document.getElementById('nb1b')?.value||'';
+  const ok=a.trim().split(/\s+/).length>=10&&b.trim().split(/\s+/).length>=10;
+  const gate=document.getElementById('gate1');
+  const btn=document.getElementById('btn1');
+  if(gate) gate.style.display=ok?'none':'block';
+  if(btn) btn.disabled=!ok;
+}
+function watchNotes4(){
+  const a=document.getElementById('nb4a')?.value||'';
+  const b=document.getElementById('nb4b')?.value||'';
+  const c=document.getElementById('nb4c')?.value||'';
+  const ok=a.trim().split(/\s+/).length>=15&&b.trim().split(/\s+/).length>=15&&c.trim().split(/\s+/).length>=8;
+  const gate=document.getElementById('gate4');
+  const btn=document.getElementById('btn4');
+  if(gate) gate.style.display=ok?'none':'block';
+  if(btn) btn.disabled=!ok;
+}
+watchNotes1(); watchNotes4();
+
+// ══════════════════════════════════════════
+// NUMERICAL PROBLEMS
+// ══════════════════════════════════════════
+let p1tries=0, p2tries=0, p3tries=0;
+
+function checkNum(inputId, answer, tol, fbId, nextId){
+  const val=parseFloat(document.getElementById(inputId).value);
+  const fb=document.getElementById(fbId);
+  const nextEl=document.getElementById(nextId);
+  if(isNaN(val)){
+    fb.className='answer-fb hint';fb.textContent='⚠️ Please enter a number.';return;
+  }
+  if(Math.abs(val-answer)<=tol){
+    fb.className='answer-fb ok';
+    fb.textContent=`✅ Correct! The answer is ${answer}. Great work — you applied the law correctly.`;
+    document.getElementById(inputId).disabled=true;
+    if(nextEl) nextEl.style.display='block';
+  } else {
+    const tries=inputId==='p1ans'?++p1tries:inputId==='p2ans'?++p2tries:++p3tries;
+    if(tries>=2){
+      fb.className='answer-fb hint';
+      fb.textContent=`💡 Hint: The answer is ${answer}. Review the steps above and see how it's calculated. You can still continue.`;
+      if(nextEl) nextEl.style.display='block';
+    } else {
+      fb.className='answer-fb bad';
+      fb.textContent=`❌ Not quite. Try again — re-read the steps carefully. (Attempt ${tries}/2)`;
+    }
+  }
+}
+
+// ══════════════════════════════════════════
+// CANVAS: BOYLE'S LAW PISTON
+// ══════════════════════════════════════════
+let boyleParticles=[], boyleVol=100, boyleRAF;
+function initBoyle(){
+  const canvas=document.getElementById('c2');
+  if(!canvas)return;
+  const dpr=window.devicePixelRatio||1;
+  const W=canvas.offsetWidth||360;
+  canvas.width=W*dpr; canvas.height=130*dpr;
+  const ctx=canvas.getContext('2d');
+  ctx.scale(dpr,dpr);
+  boyleParticles=[];
+  for(let i=0;i<18;i++) boyleParticles.push({x:30+Math.random()*280,y:20+Math.random()*90,vx:(Math.random()-.5)*1.8,vy:(Math.random()-.5)*1.8});
+  if(boyleRAF) cancelAnimationFrame(boyleRAF);
+  function draw(){
+    boyleRAF=requestAnimationFrame(draw);
+    const pistonX=20+(W-40)*(boyleVol/100);
+    ctx.clearRect(0,0,W,130);
+    // bg
+    ctx.fillStyle='#f2ede0';ctx.fillRect(0,0,W,130);
+    // gas zone
+    const gasAlpha=Math.min(.15,0.05+0.1*(100/boyleVol));
+    ctx.fillStyle=`rgba(212,88,10,${gasAlpha})`;
+    ctx.fillRect(20,15,pistonX-20,100);
+    // walls
+    ctx.strokeStyle='#c8b89a';ctx.lineWidth=2;
+    ctx.strokeRect(20,15,pistonX-20,100);
+    // piston
+    ctx.fillStyle='#1a1208';ctx.fillRect(pistonX-2,12,12,106);
+    ctx.fillStyle='#d4580a';ctx.fillRect(pistonX-2,12,4,106);
+    // particles
+    const spd=Math.sqrt(100/boyleVol);
+    boyleParticles.forEach(p=>{
+      p.x+=p.vx*spd; p.y+=p.vy*spd;
+      if(p.x<25){p.x=25;p.vx=Math.abs(p.vx);}
+      if(p.x>pistonX-8){p.x=pistonX-8;p.vx=-Math.abs(p.vx);}
+      if(p.y<20){p.y=20;p.vy=Math.abs(p.vy);}
+      if(p.y>110){p.y=110;p.vy=-Math.abs(p.vy);}
+      ctx.beginPath();ctx.arc(p.x,p.y,4,0,Math.PI*2);
+      ctx.fillStyle=`rgba(30,77,140,${Math.min(1,0.5+0.5*(100/boyleVol))})`;
+      ctx.fill();
+    });
+  }
+  draw();
+}
+function simBoyle(v){
+  boyleVol=+v;
+  const p=(100/boyleVol).toFixed(2);
+  document.getElementById('s2v').textContent=v+'%';
+  document.getElementById('r2v').textContent=v+'%';
+  document.getElementById('r2p').textContent=p+'×';
+  document.getElementById('r2pv').textContent=Math.round(v*(100/boyleVol));//always 100
+  // missions
+  if(v<=52&&!m2_50done){m2_50done=true;document.getElementById('m2d1').classList.add('achieved');document.getElementById('m2t1').textContent='Volume at 50% ✅ — pressure doubled!';}
+  if(v<=26&&!m2_25done){m2_25done=true;document.getElementById('m2d2').classList.add('achieved');document.getElementById('m2t2').textContent='Volume at 25% ✅ — pressure quadrupled!';}
+  if(m2_50done&&m2_25done&&document.getElementById('s2-after').style.display!=='block'){
+    document.getElementById('s2-after').style.display='block';
+  }
+}
+
+// ══════════════════════════════════════════
+// CANVAS: CHARLES'S LAW BALLOON
+// ══════════════════════════════════════════
+let charlesParticles=[], charlesTemp=20, charlesRAF;
+function initCharles(){
+  const canvas=document.getElementById('c3');
+  if(!canvas)return;
+  const dpr=window.devicePixelRatio||1;
+  const W=canvas.offsetWidth||360;
+  canvas.width=W*dpr; canvas.height=120*dpr;
+  const ctx=canvas.getContext('2d');
+  ctx.scale(dpr,dpr);
+  charlesParticles=[];
+  for(let i=0;i<14;i++) charlesParticles.push({x:W/2+(Math.random()-.5)*50,y:60+(Math.random()-.5)*40,vx:(Math.random()-.5)*2,vy:(Math.random()-.5)*2});
+  if(charlesRAF) cancelAnimationFrame(charlesRAF);
+  function draw(){
+    charlesRAF=requestAnimationFrame(draw);
+    const T=charlesTemp+273;
+    const baseT=293;
+    const r=Math.max(18,Math.min(54,36*(T/baseT)));
+    ctx.clearRect(0,0,W,120);
+    ctx.fillStyle='#f2ede0';ctx.fillRect(0,0,W,120);
+    // balloon body
+    const cx=W/2,cy=55;
+    const grad=ctx.createRadialGradient(cx-r*.3,cy-r*.3,2,cx,cy,r);
+    const hot=charlesTemp>50;
+    const cold=charlesTemp<0;
+    grad.addColorStop(0,hot?'#fdba74':'#93c5fd');
+    grad.addColorStop(1,hot?'#d4580a':'#1e4d8c');
+    ctx.beginPath();ctx.arc(cx,cy,r,0,Math.PI*2);
+    ctx.fillStyle=grad;ctx.fill();
+    ctx.strokeStyle='rgba(0,0,0,0.1)';ctx.lineWidth=1;ctx.stroke();
+    // string
+    ctx.beginPath();ctx.moveTo(cx,cy+r);ctx.lineTo(cx,cy+r+14);
+    ctx.strokeStyle='#7a6a52';ctx.lineWidth=1.5;ctx.stroke();
+    // particles inside
+    const spd=Math.sqrt(T/baseT)*1.2;
+    charlesParticles.forEach(p=>{
+      p.x+=p.vx*spd; p.y+=p.vy*spd;
+      const dx=p.x-cx,dy=p.y-cy,dist=Math.sqrt(dx*dx+dy*dy);
+      if(dist>r-6){const a=Math.atan2(dy,dx);p.x=cx+Math.cos(a)*(r-6);p.y=cy+Math.sin(a)*(r-6);const dot=p.vx*Math.cos(a)+p.vy*Math.sin(a);p.vx-=2*dot*Math.cos(a);p.vy-=2*dot*Math.sin(a);}
+      ctx.beginPath();ctx.arc(p.x,p.y,2.5,0,Math.PI*2);
+      ctx.fillStyle='rgba(255,255,255,0.7)';ctx.fill();
+    });
+    // label
+    ctx.fillStyle='rgba(255,255,255,0.9)';
+    ctx.font=`bold ${Math.max(9,11*(r/36))}px DM Mono,monospace`;
+    ctx.textAlign='center';ctx.textBaseline='middle';
+    ctx.fillText(charlesTemp+'°C',cx,cy);
+  }
+  draw();
+}
+function simCharles(v){
+  charlesTemp=+v;
+  document.getElementById('s3t').textContent=v+' °C';
+  document.getElementById('r3c').textContent=v;
+  const K=+v+273;
+  document.getElementById('r3k').textContent=K+' K';
+  const pct=Math.round(K/293*100);
+  document.getElementById('r3v').textContent=pct+'%';
+  if(v>=100&&!m3_hot){m3_hot=true;document.getElementById('m3d1').classList.add('achieved');document.getElementById('m3t1').textContent='Reached 100°C ✅ — balloon grew!';}
+  if(v<=-20&&!m3_cold){m3_cold=true;document.getElementById('m3d2').classList.add('achieved');document.getElementById('m3t2').textContent='Reached −20°C ✅ — balloon shrank!';}
+  if(m3_hot&&m3_cold&&document.getElementById('s3-prob').style.display!=='block'){
+    document.getElementById('s3-prob').style.display='block';
+  }
+}
+
+// ══════════════════════════════════════════
+// QUIZ
+// ══════════════════════════════════════════
+const Qs=[
+  {q:"Gas particles are different from solid particles because they...",opts:["Vibrate in fixed positions","Are arranged in tight rows","Move freely and are far apart","Always stay at the bottom of a container"],ans:2,
+   fb:{ok:"✅ Gas particles move freely with lots of space between them — that's what makes gases compressible and shapeless.",bad:"❌ Solid particles are fixed. Gas particles move freely and spread out to fill their container."}},
+  {q:"What does 'pressure' mean in the context of gases?",opts:["The weight of the gas","The force of particle collisions on container walls","The temperature of the gas","The number of gas particles"],ans:1,
+   fb:{ok:"✅ Exactly. Every collision between a particle and a wall creates a tiny push. All those pushes together = pressure.",bad:"❌ Pressure is caused by particles hitting the walls of the container, not by the weight or count of particles alone."}},
+  {q:"Boyle's Law: you have a gas at 1 atm in a 4 L container. You compress it to 1 L. What is the new pressure?",opts:["1 atm","2 atm","4 atm","0.25 atm"],ans:2,
+   fb:{ok:"✅ P₁V₁ = P₂V₂ → 1×4 = P₂×1 → P₂ = 4 atm. Volume quartered → pressure quadrupled.",bad:"❌ Use Boyle's Law: P₁V₁=P₂V₂. 1×4=P₂×1, so P₂=4 atm."}},
+  {q:"A gas at 200 K has a volume of 5 L. At 400 K (same pressure), its volume will be...",opts:["2.5 L","5 L","10 L","20 L"],ans:2,
+   fb:{ok:"✅ Charles's Law: V₂ = V₁×(T₂/T₁) = 5×(400/200) = 10 L. Temperature doubled → volume doubled.",bad:"❌ Charles's Law: V₂ = V₁×(T₂/T₁) = 5×(400/200) = 10 L."}},
+  {q:"Why must we use Kelvin (not Celsius) in Charles's Law calculations?",opts:["Kelvin is easier to type","0°C would cause division by zero and break the math","Kelvin makes numbers smaller","Celsius doesn't measure temperature correctly"],ans:1,
+   fb:{ok:"✅ If temperature were 0°C, dividing by zero would be undefined. Kelvin starts at absolute zero (−273°C), so it's always positive.",bad:"❌ At 0°C the formula V/T=k would require dividing by zero. Kelvin avoids this since 0°C = 273 K."}},
+  {q:"A doctor pulls back a syringe plunger, increasing the volume inside. What happens to pressure inside the syringe?",opts:["Pressure increases","Pressure stays the same","Pressure decreases, drawing in liquid","The syringe breaks"],ans:2,
+   fb:{ok:"✅ Boyle's Law: larger volume → lower pressure inside → higher outside pressure pushes the liquid in.",bad:"❌ Boyle's Law: more volume → less pressure. The lower pressure inside draws the liquid in from outside."}},
+  {q:"Which gas law explains why a balloon left in a cold car overnight gets smaller?",opts:["Boyle's Law — pressure increased","Charles's Law — temperature dropped, volume decreased","Neither — balloons don't follow gas laws","Boyle's Law — volume increased"],ans:1,
+   fb:{ok:"✅ Charles's Law: lower temperature → slower particles → smaller volume. The balloon shrinks in the cold.",bad:"❌ When temperature drops, gas volume decreases (Charles's Law). The balloon gets smaller because T↓ → V↓."}},
+  {q:"A fire extinguisher stores CO₂ at very high pressure in a small tank. When you press the handle, the gas expands rapidly. This is an example of...",opts:["Charles's Law (temperature change)","Boyle's Law (pressure decreasing as volume increases)","Neither law applies to real objects","Newton's Third Law"],ans:1,
+   fb:{ok:"✅ Boyle's Law: releasing the valve allows volume to increase, so pressure drops rapidly — the gas shoots out.",bad:"❌ The tank stores gas at high P, small V. Opening the valve allows V to increase and P to drop (Boyle's Law)."}},
+  {q:"Steam power plants use steam to spin turbines. This works because steam is a gas that...",opts:["Is lighter than air","Has high pressure and can do work when it expands","Is invisible and odorless","Cannot be compressed"],ans:1,
+   fb:{ok:"✅ Hot steam at high pressure expands and pushes turbine blades — converting thermal energy into mechanical energy.",bad:"❌ Steam works because it has high pressure. When it expands (volume increases), it pushes on the turbine blades."}},
+  {q:"A gas occupies 10 L at 2 atm. If pressure is increased to 5 atm (temperature constant), what is the new volume?",opts:["25 L","4 L","10 L","50 L"],ans:1,
+   fb:{ok:"✅ P₁V₁=P₂V₂ → 2×10=5×V₂ → V₂=20/5=4 L. Pressure increased 2.5× → volume decreased to 2/5 of original.",bad:"❌ Boyle's Law: 2×10=5×V₂ → V₂=4 L. Higher pressure = smaller volume."}}
+];
+
+function initQuiz(){
+  qIdx=0;qScore=0;qAnswers=[];
+  document.getElementById('qz-area').style.display='block';
+  document.getElementById('qz-result').style.display='none';
+  buildDots();showQ();
+}
+function buildDots(){
+  const w=document.getElementById('qz-dots');
+  w.innerHTML=Qs.map((_,i)=>`<div class="qz-dot" id="qd${i}"></div>`).join('');
+  document.getElementById('qd0').classList.add('cur');
+}
+function showQ(){
+  const q=Qs[qIdx];
+  document.getElementById('ql-lbl').textContent=`QUESTION ${qIdx+1} OF ${Qs.length}`;
+  document.getElementById('ql-text').textContent=q.q;
+  document.getElementById('ql-fb').className='qz-fb';
+  document.getElementById('qz-next').style.display='none';
+  document.getElementById('ql-opts').innerHTML=q.opts.map((o,i)=>`<button class="qz-opt" onclick="ansQ(${i})">${String.fromCharCode(65+i)}. ${o}</button>`).join('');
+}
+function ansQ(i){
+  const q=Qs[qIdx];
+  document.querySelectorAll('.qz-opt').forEach(b=>b.classList.add('disabled'));
+  document.querySelectorAll('.qz-opt')[q.ans].classList.add('correct');
+  const ok=i===q.ans;
+  if(!ok) document.querySelectorAll('.qz-opt')[i].classList.add('wrong');
+  const fb=document.getElementById('ql-fb');
+  fb.className='qz-fb '+(ok?'ok':'bad');
+  fb.textContent=ok?q.fb.ok:q.fb.bad;
+  if(ok) qScore++;
+  qAnswers.push(ok);
+  document.getElementById(`qd${qIdx}`).classList.remove('cur');
+  document.getElementById(`qd${qIdx}`).classList.add(ok?'ok':'bad');
+  document.getElementById('qz-next').style.display='block';
+}
+function nextQ(){
+  qIdx++;
+  if(qIdx>=Qs.length){showResult();return;}
+  document.getElementById(`qd${qIdx}`).classList.add('cur');
+  showQ();
+}
+function showResult(){
+  document.getElementById('qz-area').style.display='none';
+  document.getElementById('qz-result').style.display='block';
+  const pct=Math.round(qScore/Qs.length*100);
+  document.getElementById('sc-big').textContent=qScore;
+  let title,msg,color;
+  if(pct>=80){title='Excellent!';msg='You have a strong understanding of gas laws. Great work!';color='var(--green)';}
+  else if(pct>=60){title='Good job!';msg='You got the main ideas. Review the questions you missed with your partner.';color='var(--yellow)';}
+  else{title='Keep trying!';msg='Re-read sections 2 and 3, then retake the quiz. You can do it!';color='var(--red)';}
+  document.getElementById('sc-title').textContent=title+` (${qScore}/${Qs.length})`;
+  document.getElementById('sc-msg').textContent=msg;
+  document.getElementById('sc-ring').style.borderColor=color;
+  document.getElementById('sc-big').style.color=color;
+  if(pct>=60){
+    document.getElementById('design-section').style.display='block';
+    document.getElementById('finish-btn').style.display='block';
+  } else {
+    document.getElementById('finish-btn').style.display='block';
+  }
+}
+function retakeQ(){initQuiz();}
+
+// restore saved text areas
+window.addEventListener('load',()=>{loadAll();watchNotes1();watchNotes4();});
+</script>
+</body>
+</html>
