@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Matter & Energy — Physical and Chemical Changes</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0d1a;
+    --card: #141428;
+    --border: rgba(255,255,255,0.08);
+    --text: #e8e8f5;
+    --muted: #8888aa;
+    --yellow: #f9e04b;
+    --orange: #ff7043;
+    --pink: #e040fb;
+    --cyan: #00e5ff;
+    --green: #69f0ae;
+    --blue: #448aff;
+    --purple: #b388ff;
+    --radius: 18px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    overflow-x: hidden;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 3rem 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-bg {
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 70% 60% at 20% 30%, rgba(0,229,255,0.12) 0%, transparent 70%),
+      radial-gradient(ellipse 60% 50% at 80% 70%, rgba(224,64,251,0.12) 0%, transparent 70%),
+      radial-gradient(ellipse 50% 40% at 50% 100%, rgba(249,224,75,0.08) 0%, transparent 60%);
+    animation: bgPulse 8s ease-in-out infinite alternate;
+  }
+
+  @keyframes bgPulse {
+    from { opacity: 0.7; }
+    to   { opacity: 1; }
+  }
+
+  .hero-orbs {
+    position: absolute; inset: 0; pointer-events: none;
+  }
+
+  .orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(60px);
+    animation: float 10s ease-in-out infinite;
+  }
+
+  .orb1 { width: 300px; height: 300px; background: rgba(0,229,255,0.15); top: -80px; left: -80px; animation-delay: 0s; }
+  .orb2 { width: 250px; height: 250px; background: rgba(224,64,251,0.15); bottom: -60px; right: -60px; animation-delay: 3s; }
+  .orb3 { width: 200px; height: 200px; background: rgba(249,224,75,0.1); top: 50%; left: 50%; transform: translate(-50%,-50%); animation-delay: 6s; }
+
+  @keyframes float {
+    0%,100% { transform: translateY(0) scale(1); }
+    50%      { transform: translateY(-30px) scale(1.05); }
+  }
+
+  .pill {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    background: rgba(0,229,255,0.15);
+    border: 1px solid rgba(0,229,255,0.4);
+    color: var(--cyan);
+    padding: 0.4rem 1.2rem;
+    border-radius: 100px;
+    margin-bottom: 1.8rem;
+    display: inline-block;
+    animation: fadeDown 0.8s ease both;
+  }
+
+  h1 {
+    font-size: clamp(2.4rem, 6vw, 5rem);
+    font-weight: 900;
+    line-height: 1.1;
+    margin-bottom: 1.2rem;
+    animation: fadeDown 0.8s 0.15s ease both;
+  }
+
+  .gradient-text {
+    background: linear-gradient(135deg, var(--cyan) 0%, var(--pink) 50%, var(--yellow) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-sub {
+    font-size: 1.15rem;
+    color: var(--muted);
+    max-width: 560px;
+    line-height: 1.7;
+    animation: fadeDown 0.8s 0.3s ease both;
+  }
+
+  .scroll-hint {
+    margin-top: 3rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--muted);
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+    animation: fadeDown 0.8s 0.6s ease both;
+  }
+
+  .scroll-arrow {
+    width: 24px; height: 24px;
+    border-right: 2px solid var(--muted);
+    border-bottom: 2px solid var(--muted);
+    transform: rotate(45deg);
+    animation: bounce 2s ease-in-out infinite;
+  }
+
+  @keyframes bounce {
+    0%,100% { transform: rotate(45deg) translateY(0); }
+    50%      { transform: rotate(45deg) translateY(6px); }
+  }
+
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── SECTION WRAPPER ── */
+  .section {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 5rem 2rem;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .section-icon {
+    width: 52px; height: 52px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.6rem;
+    flex-shrink: 0;
+  }
+
+  .section-title {
+    font-size: clamp(1.5rem, 3vw, 2.2rem);
+    font-weight: 900;
+  }
+
+  .section-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 0.3rem;
+  }
+
+  /* ── DIVIDER ── */
+  .divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border), transparent);
+    margin: 0 2rem;
+  }
+
+  /* ── CARDS ── */
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.4rem;
+  }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.8rem;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  }
+
+  .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+  }
+
+  .card-accent {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    border-radius: 3px 3px 0 0;
+  }
+
+  .card-emoji {
+    font-size: 2.2rem;
+    margin-bottom: 1rem;
+    display: block;
+  }
+
+  .card h3 {
+    font-size: 1.1rem;
+    font-weight: 800;
+    margin-bottom: 0.6rem;
+  }
+
+  .card p {
+    font-size: 0.92rem;
+    color: var(--muted);
+    line-height: 1.65;
+  }
+
+  /* ── MATTER SECTION ── */
+  .matter-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+  }
+
+  .matter-table th {
+    background: rgba(255,255,255,0.05);
+    padding: 0.9rem 1.2rem;
+    text-align: left;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .matter-table td {
+    padding: 1rem 1.2rem;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.93rem;
+    vertical-align: top;
+    line-height: 1.5;
+  }
+
+  .matter-table tr:last-child td { border-bottom: none; }
+  .matter-table tr:hover td { background: rgba(255,255,255,0.02); }
+
+  .tag {
+    display: inline-block;
+    padding: 0.2rem 0.7rem;
+    border-radius: 100px;
+    font-size: 0.78rem;
+    font-weight: 700;
+  }
+
+  /* ── CHANGE COMPARISON ── */
+  .compare-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+
+  @media(max-width: 600px) { .compare-grid { grid-template-columns: 1fr; } }
+
+  .compare-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .compare-card h3 {
+    font-size: 1.3rem;
+    font-weight: 900;
+    margin-bottom: 0.4rem;
+  }
+
+  .compare-card .subtitle {
+    font-size: 0.85rem;
+    color: var(--muted);
+    margin-bottom: 1.5rem;
+  }
+
+  .feature-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .feature-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.7rem;
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+
+  .feature-list li::before {
+    content: attr(data-icon);
+    font-size: 1rem;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .examples-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .example-chip {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.3rem 0.75rem;
+    font-size: 0.8rem;
+    color: var(--muted);
+  }
+
+  /* ── TECH APPS ── */
+  .tech-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.4rem;
+  }
+
+  .tech-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.8rem;
+    display: flex;
+    gap: 1.2rem;
+    align-items: flex-start;
+    transition: transform 0.3s, border-color 0.3s;
+  }
+
+  .tech-card:hover {
+    transform: translateY(-4px);
+  }
+
+  .tech-icon-wrap {
+    width: 52px; height: 52px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.6rem;
+    flex-shrink: 0;
+  }
+
+  .tech-card h3 { font-size: 1rem; font-weight: 800; margin-bottom: 0.4rem; }
+  .tech-card p  { font-size: 0.88rem; color: var(--muted); line-height: 1.55; }
+
+  /* ── KEY CONCEPTS BANNER ── */
+  .concepts-strip {
+    background: linear-gradient(135deg, rgba(0,229,255,0.08) 0%, rgba(224,64,251,0.08) 100%);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: var(--radius);
+    padding: 2.5rem 2rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 1.5rem;
+    text-align: center;
+  }
+
+  .concept-item { display: flex; flex-direction: column; align-items: center; gap: 0.5rem; }
+  .concept-num  { font-family: 'Space Mono', monospace; font-size: 2.2rem; font-weight: 700; }
+  .concept-lbl  { font-size: 0.85rem; color: var(--muted); }
+
+  /* ── ENERGY BRIDGE ── */
+  .energy-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin: 2rem 0;
+  }
+
+  .energy-node {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 1.2rem 1.6rem;
+    text-align: center;
+    min-width: 140px;
+  }
+
+  .energy-node .en-icon { font-size: 2rem; display: block; margin-bottom: 0.4rem; }
+  .energy-node .en-label { font-size: 0.82rem; font-weight: 700; }
+  .energy-node .en-sub   { font-size: 0.75rem; color: var(--muted); }
+
+  .arrow-connector {
+    font-size: 1.8rem;
+    color: var(--muted);
+  }
+
+  /* ── CALLOUT ── */
+  .callout {
+    border-radius: var(--radius);
+    padding: 1.5rem 2rem;
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+    margin-top: 1.5rem;
+  }
+
+  .callout-icon { font-size: 1.5rem; flex-shrink: 0; margin-top: 2px; }
+  .callout h4   { font-size: 0.95rem; font-weight: 800; margin-bottom: 0.3rem; }
+  .callout p    { font-size: 0.88rem; color: var(--muted); line-height: 1.6; }
+
+  /* ── FOOTER ── */
+  footer {
+    text-align: center;
+    padding: 3rem 2rem;
+    color: var(--muted);
+    font-size: 0.85rem;
+    border-top: 1px solid var(--border);
+  }
+
+  footer span { color: var(--cyan); font-weight: 700; }
+
+  /* ── COLORS PER SECTION ── */
+  .accent-cyan   { color: var(--cyan); }
+  .accent-orange { color: var(--orange); }
+  .accent-green  { color: var(--green); }
+  .accent-pink   { color: var(--pink); }
+  .accent-yellow { color: var(--yellow); }
+  .accent-blue   { color: var(--blue); }
+  .accent-purple { color: var(--purple); }
+
+  .bg-cyan   { background: rgba(0,229,255,0.12); border-color: rgba(0,229,255,0.25) !important; }
+  .bg-orange { background: rgba(255,112,67,0.12); border-color: rgba(255,112,67,0.25) !important; }
+  .bg-green  { background: rgba(105,240,174,0.12); border-color: rgba(105,240,174,0.25) !important; }
+  .bg-pink   { background: rgba(224,64,251,0.12); border-color: rgba(224,64,251,0.25) !important; }
+  .bg-yellow { background: rgba(249,224,75,0.12); border-color: rgba(249,224,75,0.25) !important; }
+  .bg-blue   { background: rgba(68,138,255,0.12); border-color: rgba(68,138,255,0.25) !important; }
+  .bg-purple { background: rgba(179,136,255,0.12); border-color: rgba(179,136,255,0.25) !important; }
+
+  .bar-cyan   { background: linear-gradient(90deg, var(--cyan), #0097a7); }
+  .bar-orange { background: linear-gradient(90deg, var(--orange), #e64a19); }
+  .bar-green  { background: linear-gradient(90deg, var(--green), #00c853); }
+  .bar-pink   { background: linear-gradient(90deg, var(--pink), #7b1fa2); }
+  .bar-blue   { background: linear-gradient(90deg, var(--blue), #1565c0); }
+
+  /* scroll reveal */
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════ HERO ══════════════════════════════ -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-orbs">
+    <div class="orb orb1"></div>
+    <div class="orb orb2"></div>
+    <div class="orb orb3"></div>
+  </div>
+  <div style="position:relative; z-index:1;">
+    <div class="pill">⚗️ Physical Science · High School</div>
+    <h1>Matter &amp; Energy<br><span class="gradient-text">Interactions &amp; Change</span></h1>
+    <p class="hero-sub">Explore how matter and energy interact to produce physical and chemical changes — and how these processes power modern technology.</p>
+    <div class="scroll-hint">
+      <span>SCROLL TO EXPLORE</span>
+      <div class="scroll-arrow"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════ KEY NUMBERS ══════════════════════════════ -->
+<div class="section" style="padding-top:2rem; padding-bottom:2rem;">
+  <div class="concepts-strip reveal">
+    <div class="concept-item">
+      <span class="concept-num accent-cyan">4</span>
+      <span class="concept-lbl">States of Matter</span>
+    </div>
+    <div class="concept-item">
+      <span class="concept-num accent-pink">2</span>
+      <span class="concept-lbl">Types of Change</span>
+    </div>
+    <div class="concept-item">
+      <span class="concept-num accent-yellow">6</span>
+      <span class="concept-lbl">Signs of Chemical Change</span>
+    </div>
+    <div class="concept-item">
+      <span class="concept-num accent-green">∞</span>
+      <span class="concept-lbl">Tech Applications</span>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ══════════════════════════════ SECTION 1: MATTER ══════════════════════════════ -->
+<div class="section">
+  <div class="section-header reveal">
+    <div class="section-icon bg-cyan">🧱</div>
+    <div>
+      <div class="section-label accent-cyan">Section 01</div>
+      <h2 class="section-title">Matter &amp; Its Properties</h2>
+    </div>
+  </div>
+
+  <p class="reveal" style="color:var(--muted); max-width:700px; line-height:1.75; margin-bottom:2rem; font-size:0.97rem;">
+    Matter is anything that has <strong style="color:var(--text)">mass</strong> and <strong style="color:var(--text)">occupies space</strong>. It exists in different states depending on how its particles are arranged and how much energy they have. Understanding matter's properties helps us predict and control how it behaves.
+  </p>
+
+  <div class="card-grid reveal">
+    <div class="card bg-cyan">
+      <div class="card-accent bar-cyan"></div>
+      <span class="card-emoji">🧊</span>
+      <h3 class="accent-cyan">Solid</h3>
+      <p>Particles are tightly packed in a fixed arrangement. Definite shape and volume. Low kinetic energy. Examples: iron, ice, rock salt.</p>
+    </div>
+    <div class="card bg-blue">
+      <div class="card-accent bar-blue"></div>
+      <span class="card-emoji">💧</span>
+      <h3 class="accent-blue">Liquid</h3>
+      <p>Particles are close but can move past each other. Definite volume, no fixed shape. Examples: water, mercury, ethanol.</p>
+    </div>
+    <div class="card bg-orange">
+      <div class="card-accent bar-orange"></div>
+      <span class="card-emoji">💨</span>
+      <h3 class="accent-orange">Gas</h3>
+      <p>Particles move freely with high kinetic energy. No definite shape or volume; expands to fill its container. Examples: oxygen, nitrogen, steam.</p>
+    </div>
+    <div class="card bg-pink">
+      <div class="card-accent bar-pink"></div>
+      <span class="card-emoji">⚡</span>
+      <h3 class="accent-pink">Plasma</h3>
+      <p>Ionized gas with extremely high energy. Most common state in the universe. Examples: lightning, stars, neon signs.</p>
+    </div>
+  </div>
+
+  <!-- Properties table -->
+  <div class="reveal" style="margin-top:2.5rem;">
+    <h3 style="font-size:1.1rem; margin-bottom:1rem; font-weight:800;">Physical vs. Chemical Properties</h3>
+    <div style="overflow-x:auto; background:var(--card); border:1px solid var(--border); border-radius:var(--radius);">
+      <table class="matter-table">
+        <thead>
+          <tr>
+            <th>Property Type</th>
+            <th>Definition</th>
+            <th>Examples</th>
+            <th>Measured without…</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="tag bg-cyan accent-cyan">Physical</span></td>
+            <td>Can be observed or measured without changing the substance's identity.</td>
+            <td>Color, density, melting point, boiling point, hardness, conductivity</td>
+            <td>…changing the substance</td>
+          </tr>
+          <tr>
+            <td><span class="tag bg-pink accent-pink">Chemical</span></td>
+            <td>Describes how a substance reacts with other substances or changes into a different substance.</td>
+            <td>Flammability, reactivity with acid, tendency to rust, toxicity</td>
+            <td>…observing the reaction itself</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="callout bg-yellow reveal" style="margin-top:1.5rem;">
+    <span class="callout-icon">💡</span>
+    <div>
+      <h4 class="accent-yellow">Think About It</h4>
+      <p>You can cut a piece of gold into smaller pieces (physical change — still gold). But if you dissolve zinc in acid, it becomes a completely different substance (chemical change). Which property — physical or chemical — lets you predict each scenario?</p>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ══════════════════════════════ SECTION 2: PHYSICAL CHANGES ══════════════════════════════ -->
+<div class="section">
+  <div class="section-header reveal">
+    <div class="section-icon bg-blue">🔄</div>
+    <div>
+      <div class="section-label accent-blue">Section 02</div>
+      <h2 class="section-title">Physical Changes</h2>
+    </div>
+  </div>
+
+  <p class="reveal" style="color:var(--muted); max-width:700px; line-height:1.75; margin-bottom:2rem; font-size:0.97rem;">
+    A <strong style="color:var(--text)">physical change</strong> alters the form or appearance of matter but does <em>not</em> change its chemical composition. The substance remains the same substance — no new molecules are formed.
+  </p>
+
+  <!-- Energy ↔ State change diagram -->
+  <div class="reveal" style="background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:2rem; margin-bottom:2rem;">
+    <h3 style="font-size:1rem; font-weight:800; margin-bottom:1.5rem; text-align:center;">State Changes &amp; Energy Transfer</h3>
+    <div class="energy-row">
+      <div class="energy-node">
+        <span class="en-icon">🧊</span>
+        <div class="en-label">SOLID</div>
+      </div>
+      <div style="text-align:center;">
+        <div style="font-size:0.7rem; color:var(--cyan); margin-bottom:2px;">MELTING ▶</div>
+        <div class="arrow-connector">⇄</div>
+        <div style="font-size:0.7rem; color:var(--blue); margin-top:2px;">◀ FREEZING</div>
+      </div>
+      <div class="energy-node">
+        <span class="en-icon">💧</span>
+        <div class="en-label">LIQUID</div>
+      </div>
+      <div style="text-align:center;">
+        <div style="font-size:0.7rem; color:var(--orange); margin-bottom:2px;">VAPORIZATION ▶</div>
+        <div class="arrow-connector">⇄</div>
+        <div style="font-size:0.7rem; color:var(--blue); margin-top:2px;">◀ CONDENSATION</div>
+      </div>
+      <div class="energy-node">
+        <span class="en-icon">💨</span>
+        <div class="en-label">GAS</div>
+      </div>
+    </div>
+    <div style="text-align:center; margin-top:1.2rem; display:flex; justify-content:center; gap:2rem; flex-wrap:wrap;">
+      <span style="font-size:0.8rem; color:var(--muted);">🔺 <span style="color:var(--orange);">Adds energy</span> → particles move faster</span>
+      <span style="font-size:0.8rem; color:var(--muted);">🔻 <span style="color:var(--cyan);">Removes energy</span> → particles slow down</span>
+    </div>
+    <p style="font-size:0.8rem; color:var(--muted); text-align:center; margin-top:0.8rem;">Also: <strong style="color:var(--text)">Sublimation</strong> (solid → gas) and <strong style="color:var(--text)">Deposition</strong> (gas → solid) skip the liquid phase.</p>
+  </div>
+
+  <div class="compare-card bg-blue reveal">
+    <div class="card-accent bar-blue"></div>
+    <h3 class="accent-blue">Characteristics of Physical Changes</h3>
+    <p class="subtitle">How to recognize them in the real world</p>
+    <ul class="feature-list">
+      <li data-icon="✅">The chemical formula of the substance stays the same (e.g., H₂O remains H₂O whether ice, liquid, or steam).</li>
+      <li data-icon="✅">The change is usually <strong>reversible</strong> — you can get the original substance back.</li>
+      <li data-icon="✅">No new substances are formed; only the size, shape, or state changes.</li>
+      <li data-icon="✅">Energy (heat, pressure, light) drives the change but does not create new bonds.</li>
+    </ul>
+    <div>
+      <p style="font-size:0.8rem; color:var(--muted); margin-bottom:0.6rem; font-family:'Space Mono',monospace; text-transform:uppercase; letter-spacing:0.08em;">Everyday Examples</p>
+      <div class="examples-row">
+        <span class="example-chip">Cutting paper ✂️</span>
+        <span class="example-chip">Melting ice 🧊</span>
+        <span class="example-chip">Dissolving sugar 🍬</span>
+        <span class="example-chip">Bending metal 🔧</span>
+        <span class="example-chip">Boiling water 🫧</span>
+        <span class="example-chip">Breaking glass 💎</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ══════════════════════════════ SECTION 3: CHEMICAL CHANGES ══════════════════════════════ -->
+<div class="section">
+  <div class="section-header reveal">
+    <div class="section-icon bg-orange">⚗️</div>
+    <div>
+      <div class="section-label accent-orange">Section 03</div>
+      <h2 class="section-title">Chemical Changes</h2>
+    </div>
+  </div>
+
+  <p class="reveal" style="color:var(--muted); max-width:700px; line-height:1.75; margin-bottom:2rem; font-size:0.97rem;">
+    A <strong style="color:var(--text)">chemical change</strong> (chemical reaction) produces one or more new substances with different properties and a different chemical composition. Energy is absorbed or released as chemical bonds are broken and new ones are formed.
+  </p>
+
+  <!-- Physical vs Chemical side by side -->
+  <div class="compare-grid reveal">
+    <div class="compare-card bg-blue">
+      <div class="card-accent bar-blue"></div>
+      <h3 class="accent-blue">⚙️ Physical Change</h3>
+      <p class="subtitle">Same substance, different form</p>
+      <ul class="feature-list">
+        <li data-icon="🔵">No new substances formed</li>
+        <li data-icon="🔵">Usually reversible</li>
+        <li data-icon="🔵">Chemical formula unchanged</li>
+        <li data-icon="🔵">Energy changes state only</li>
+      </ul>
+      <div class="examples-row">
+        <span class="example-chip">Melting wax</span>
+        <span class="example-chip">Tearing fabric</span>
+        <span class="example-chip">Freezing water</span>
+      </div>
+    </div>
+    <div class="compare-card bg-orange">
+      <div class="card-accent bar-orange"></div>
+      <h3 class="accent-orange">🔥 Chemical Change</h3>
+      <p class="subtitle">New substances with new properties</p>
+      <ul class="feature-list">
+        <li data-icon="🟠">New substances (products) formed</li>
+        <li data-icon="🟠">Usually irreversible</li>
+        <li data-icon="🟠">Chemical formula changes</li>
+        <li data-icon="🟠">Energy absorbed or released</li>
+      </ul>
+      <div class="examples-row">
+        <span class="example-chip">Burning wood</span>
+        <span class="example-chip">Rusting iron</span>
+        <span class="example-chip">Cooking an egg</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6 signs of chemical change -->
+  <h3 class="reveal" style="margin-top:2.5rem; margin-bottom:1.2rem; font-size:1.1rem; font-weight:800;">🔍 6 Signs of a Chemical Change</h3>
+  <div class="card-grid reveal">
+    <div class="card bg-orange">
+      <div class="card-accent bar-orange"></div>
+      <span class="card-emoji">🔥</span>
+      <h3 class="accent-orange">Heat or Light Produced</h3>
+      <p>Exothermic reactions release energy. Example: combustion of methane produces heat and light (flame).</p>
+    </div>
+    <div class="card bg-yellow">
+      <div class="card-accent" style="background:var(--yellow);"></div>
+      <span class="card-emoji">🌈</span>
+      <h3 class="accent-yellow">Color Change</h3>
+      <p>A new color indicates a new substance. Example: iron turns reddish-brown when it rusts (forms iron oxide).</p>
+    </div>
+    <div class="card bg-cyan">
+      <div class="card-accent bar-cyan"></div>
+      <span class="card-emoji">💭</span>
+      <h3 class="accent-cyan">Gas Produced</h3>
+      <p>Bubbles forming in a solution may indicate a new gas. Example: vinegar + baking soda → CO₂ gas.</p>
+    </div>
+    <div class="card bg-blue">
+      <div class="card-accent bar-blue"></div>
+      <span class="card-emoji">🌧️</span>
+      <h3 class="accent-blue">Precipitate Forms</h3>
+      <p>A solid forms from two liquids mixing. Example: silver nitrate + sodium chloride → white AgCl precipitate.</p>
+    </div>
+    <div class="card bg-pink">
+      <div class="card-accent bar-pink"></div>
+      <span class="card-emoji">👃</span>
+      <h3 class="accent-pink">Odor Change</h3>
+      <p>A new or different smell indicates a new substance. Example: food spoiling produces new compounds with distinct odors.</p>
+    </div>
+    <div class="card bg-green">
+      <div class="card-accent bar-green"></div>
+      <span class="card-emoji">🌡️</span>
+      <h3 class="accent-green">Temperature Change</h3>
+      <p>Endothermic reactions absorb energy — surroundings feel cold. Example: cold packs use endothermic reactions.</p>
+    </div>
+  </div>
+
+  <div class="callout bg-pink reveal" style="margin-top:1.5rem;">
+    <span class="callout-icon">⚠️</span>
+    <div>
+      <h4 class="accent-pink">Important Distinction</h4>
+      <p>These signs <em>suggest</em> a chemical change but don't always confirm it. Temperature change can be physical (dissolving salts). Always look for evidence of a new substance being formed to confirm a chemical reaction occurred.</p>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ══════════════════════════════ SECTION 4: TECH APPLICATIONS ══════════════════════════════ -->
+<div class="section">
+  <div class="section-header reveal">
+    <div class="section-icon bg-green">🚀</div>
+    <div>
+      <div class="section-label accent-green">Section 04</div>
+      <h2 class="section-title">Technology Applications</h2>
+    </div>
+  </div>
+
+  <p class="reveal" style="color:var(--muted); max-width:700px; line-height:1.75; margin-bottom:2rem; font-size:0.97rem;">
+    The interactions between matter and energy are not just theoretical — they power the technologies we rely on every day. Engineers design systems that deliberately harness physical and chemical changes to produce useful outputs.
+  </p>
+
+  <div class="tech-grid reveal">
+    <div class="tech-card bg-orange">
+      <div class="tech-icon-wrap bg-orange">🔋</div>
+      <div>
+        <h3 class="accent-orange">Batteries &amp; Fuel Cells</h3>
+        <p><strong style="color:var(--text)">Chemical → Electrical energy.</strong> Electrochemical reactions in batteries convert stored chemical energy into electric current. Lithium-ion batteries power phones, laptops, and EVs.</p>
+      </div>
+    </div>
+    <div class="tech-card bg-yellow">
+      <div class="tech-icon-wrap bg-yellow">🚗</div>
+      <div>
+        <h3 class="accent-yellow">Internal Combustion Engine</h3>
+        <p><strong style="color:var(--text)">Chemical → Mechanical energy.</strong> Combustion of fuel (a chemical change) releases energy that moves pistons, converting thermal energy to motion.</p>
+      </div>
+    </div>
+    <div class="tech-card bg-cyan">
+      <div class="tech-icon-wrap bg-cyan">☀️</div>
+      <div>
+        <h3 class="accent-cyan">Solar Cells (Photovoltaics)</h3>
+        <p><strong style="color:var(--text)">Light → Electrical energy.</strong> Photons strike a semiconductor (silicon), exciting electrons — a physical quantum interaction that generates electricity with no moving parts.</p>
+      </div>
+    </div>
+    <div class="tech-card bg-pink">
+      <div class="tech-icon-wrap bg-pink">🏥</div>
+      <div>
+        <h3 class="accent-pink">Medical Imaging &amp; Drugs</h3>
+        <p><strong style="color:var(--text)">Chemical reactions in medicine.</strong> MRI uses nuclear spin interactions (physical). Drugs work through targeted chemical reactions in the body (enzyme inhibitors, receptor binding).</p>
+      </div>
+    </div>
+    <div class="tech-card bg-blue">
+      <div class="tech-icon-wrap bg-blue">🏗️</div>
+      <div>
+        <h3 class="accent-blue">Steel &amp; Alloy Production</h3>
+        <p><strong style="color:var(--text)">Physical + chemical changes.</strong> Iron ore undergoes reduction (chemical) and then shaping through rolling and forging (physical) to produce structural steel.</p>
+      </div>
+    </div>
+    <div class="tech-card bg-green">
+      <div class="tech-icon-wrap bg-green">🌿</div>
+      <div>
+        <h3 class="accent-green">Biofuels &amp; Fermentation</h3>
+        <p><strong style="color:var(--text)">Biochemical → Fuel energy.</strong> Microorganisms convert sugars through fermentation (a chemical change) into ethanol, which can replace or supplement fossil fuels.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Connection diagram -->
+  <div class="reveal" style="background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:2rem; margin-top:2.5rem; text-align:center;">
+    <h3 style="font-size:1rem; font-weight:800; margin-bottom:1.5rem;">The Big Picture: Energy Conversion Chain</h3>
+    <div class="energy-row" style="justify-content:center;">
+      <div class="energy-node bg-yellow">
+        <span class="en-icon">⛽</span>
+        <div class="en-label accent-yellow">FUEL</div>
+        <div class="en-sub">Chemical energy</div>
+      </div>
+      <div class="arrow-connector accent-orange">→</div>
+      <div class="energy-node bg-orange">
+        <span class="en-icon">🔥</span>
+        <div class="en-label accent-orange">COMBUSTION</div>
+        <div class="en-sub">Thermal energy</div>
+      </div>
+      <div class="arrow-connector accent-cyan">→</div>
+      <div class="energy-node bg-cyan">
+        <span class="en-icon">⚙️</span>
+        <div class="en-label accent-cyan">TURBINE</div>
+        <div class="en-sub">Mechanical energy</div>
+      </div>
+      <div class="arrow-connector accent-green">→</div>
+      <div class="energy-node bg-green">
+        <span class="en-icon">⚡</span>
+        <div class="en-label accent-green">GENERATOR</div>
+        <div class="en-sub">Electrical energy</div>
+      </div>
+    </div>
+    <p style="font-size:0.8rem; color:var(--muted); margin-top:1.2rem;">Energy is never created or destroyed — it is <strong style="color:var(--text)">transformed</strong> (Law of Conservation of Energy).</p>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ══════════════════════════════ SUMMARY ══════════════════════════════ -->
+<div class="section">
+  <div class="section-header reveal">
+    <div class="section-icon bg-purple">📋</div>
+    <div>
+      <div class="section-label accent-purple">Summary</div>
+      <h2 class="section-title">Key Takeaways</h2>
+    </div>
+  </div>
+
+  <div class="card-grid reveal">
+    <div class="card bg-cyan">
+      <div class="card-accent bar-cyan"></div>
+      <span class="card-emoji">1️⃣</span>
+      <h3 class="accent-cyan">Matter has properties</h3>
+      <p>Physical properties can be observed without changing the substance. Chemical properties describe how matter reacts and transforms.</p>
+    </div>
+    <div class="card bg-blue">
+      <div class="card-accent bar-blue"></div>
+      <span class="card-emoji">2️⃣</span>
+      <h3 class="accent-blue">Physical changes alter form</h3>
+      <p>The substance's identity stays the same. State changes, cutting, and dissolving are physical changes. Usually reversible.</p>
+    </div>
+    <div class="card bg-orange">
+      <div class="card-accent bar-orange"></div>
+      <span class="card-emoji">3️⃣</span>
+      <h3 class="accent-orange">Chemical changes make new substances</h3>
+      <p>New bonds form, new substances appear. Look for heat/light, gas, color change, precipitate, or odor as signs.</p>
+    </div>
+    <div class="card bg-green">
+      <div class="card-accent bar-green"></div>
+      <span class="card-emoji">4️⃣</span>
+      <h3 class="accent-green">Technology harnesses both</h3>
+      <p>Engineers design systems that convert energy through controlled physical and chemical changes — from batteries to engines to solar cells.</p>
+    </div>
+  </div>
+
+  <div class="callout bg-cyan reveal" style="margin-top:2rem;">
+    <span class="callout-icon">🎯</span>
+    <div>
+      <h4 class="accent-cyan">Essential Question</h4>
+      <p>How do scientists and engineers use their understanding of physical and chemical changes to solve real-world problems and design more efficient technologies? Think of one technology from your daily life and identify the energy transformations and changes it relies on.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════ FOOTER ══════════════════════════════ -->
+<footer>
+  <p>Matter &amp; Energy — Physical and Chemical Changes &nbsp;·&nbsp; <span>High School Physical Science</span></p>
+  <p style="margin-top:0.4rem; font-size:0.78rem;">Designed for classroom use</p>
+</footer>
+
+<script>
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 80);
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(r => observer.observe(r));
+</script>
+
+</body>
+</html>
