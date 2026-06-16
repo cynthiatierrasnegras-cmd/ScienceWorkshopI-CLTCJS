@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Science Workshop I — Student Guide</title>
+<style>
+:root{
+  --bg:#f8faf9;
+  --surface:#ffffff;
+  --surface2:#f0f2f0;
+  --border:#e2e6e2;
+  --text:#111827;
+  --muted:#6b7280;
+  --r:12px;--rs:8px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+
+/* TOP BAR */
+.topbar{background:var(--surface);border-bottom:1.5px solid var(--border);padding:.7rem 1rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.topbar-title{font-size:15px;font-weight:700;color:var(--text)}
+.topbar-sub{font-size:12px;color:var(--muted)}
+
+/* SESSION NAV */
+.sess-nav{display:flex;gap:6px;padding:.75rem 1rem;overflow-x:auto;background:var(--surface);border-bottom:1.5px solid var(--border);scrollbar-width:none}
+.sess-nav::-webkit-scrollbar{display:none}
+.snav-btn{flex-shrink:0;padding:.38rem .9rem;border-radius:20px;border:1.5px solid var(--border);background:transparent;font-size:13px;font-weight:600;color:var(--muted);cursor:pointer;transition:all .18s;white-space:nowrap}
+.snav-btn.active{color:#fff;border-color:transparent}
+
+/* PROGRESS */
+.prog-wrap{height:5px;background:var(--border);overflow:hidden}
+.prog-fill{height:100%;transition:width .3s}
+
+/* MAIN */
+.main{max-width:700px;margin:0 auto;padding:1rem}
+
+/* SESSION HEADER */
+.sess-header{border-radius:var(--r);overflow:hidden;margin-bottom:1rem;border:1.5px solid var(--border)}
+.sess-header-img{width:100%;height:140px;object-fit:cover;object-position:center;display:block}
+.sess-header-body{padding:.9rem 1.1rem}
+.sess-eyebrow{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:.25rem;opacity:.75}
+.sess-title{font-size:22px;font-weight:800;margin-bottom:.2rem}
+.sess-meta{font-size:13px;color:var(--muted);font-weight:500}
+
+/* TABS */
+.tabs{display:flex;gap:4px;margin-bottom:1rem;background:var(--surface);border:1.5px solid var(--border);border-radius:10px;padding:4px}
+.tab-btn{flex:1;padding:.42rem .5rem;border:none;background:transparent;font-size:13px;font-weight:600;color:var(--muted);border-radius:7px;cursor:pointer;transition:all .15s;display:flex;align-items:center;justify-content:center;gap:5px}
+.tab-btn.active{background:var(--surface);color:var(--text);box-shadow:0 1px 4px rgba(0,0,0,.08);border:1.5px solid var(--border)}
+.tab-pane{display:none}
+.tab-pane.active{display:block}
+
+/* CARDS */
+.card{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r);padding:1rem 1.15rem;margin-bottom:.75rem}
+.card-title{font-size:16px;font-weight:700;color:var(--text);margin-bottom:.5rem;display:flex;align-items:center;gap:8px}
+.card-title img{width:28px;height:28px;object-fit:cover;border-radius:6px;opacity:.85;flex-shrink:0}
+.card-body{font-size:15px;color:#374151;line-height:1.65}
+.card-body strong{color:var(--text);font-weight:700}
+
+/* TERMS */
+.terms{display:flex;flex-wrap:wrap;gap:6px;margin-top:.65rem}
+.term{font-size:12px;font-weight:600;padding:3px 10px;border-radius:20px;border:1.5px solid}
+
+/* SPLIT */
+.split-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:.65rem}
+.split-col{border-radius:var(--rs);padding:.7rem .85rem;border:1.5px solid}
+.split-label{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.4rem}
+.split-item{font-size:14px;padding:2px 0;font-weight:500}
+
+/* TABLE */
+.tbl-wrap{overflow-x:auto;margin-top:.65rem}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{background:var(--surface2);padding:.45rem .65rem;text-align:left;font-weight:700;font-size:12px;border-bottom:1.5px solid var(--border);color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+td{padding:.4rem .65rem;border-bottom:1px solid var(--border);color:#374151;vertical-align:top;line-height:1.4}
+tr:last-child td{border-bottom:none}
+
+/* EXAMPLE */
+.example{margin-top:.65rem;background:var(--surface2);border-left:3px solid;border-radius:0 var(--rs) var(--rs) 0;padding:.55rem .8rem;font-size:14px;color:var(--muted);font-style:italic;font-weight:500}
+
+/* QUIZ */
+.score-bar{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r);padding:.85rem 1.1rem;margin-bottom:.75rem;display:flex;align-items:center;gap:12px}
+.score-icon{font-size:24px}
+.score-label{font-size:13px;color:var(--muted);font-weight:500}
+.score-val{font-size:18px;font-weight:800;color:var(--text)}
+.q-block{margin-bottom:.85rem}
+.q-num{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin-bottom:.3rem}
+.q-text{font-size:15px;font-weight:700;color:var(--text);margin-bottom:.6rem;line-height:1.5}
+.opts{display:flex;flex-direction:column;gap:7px}
+.opt{background:var(--surface2);border:1.5px solid var(--border);border-radius:var(--rs);padding:.55rem .85rem;text-align:left;font-size:14px;font-weight:500;color:var(--text);cursor:pointer;transition:all .15s;line-height:1.4;width:100%}
+.opt:hover:not(:disabled){border-color:#9ca3af;background:#f3f4f6}
+.opt.correct{background:#e1f5ee;border-color:#1d9e75;color:#085041}
+.opt.wrong{background:#fee2e2;border-color:#ef4444;color:#7f1d1d}
+.opt:disabled{cursor:default}
+.hint{font-size:13px;margin-top:.4rem;padding:.4rem .7rem;border-radius:var(--rs);display:none;line-height:1.4;font-weight:500}
+.hint.show{display:block}
+.hint.ok{background:#e1f5ee;color:#085041}
+.hint.no{background:#fee2e2;color:#7f1d1d}
+.q-sep{border:none;border-top:1px solid var(--border);margin:.85rem 0}
+
+/* NOTEBOOK */
+.nb-block{background:var(--surface);border:2px dashed var(--border);border-radius:var(--r);padding:1rem 1.15rem;margin-bottom:.75rem}
+.nb-num{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin-bottom:.3rem}
+.nb-task{font-size:15px;font-weight:600;color:var(--text);line-height:1.55;margin-bottom:.6rem}
+.nb-cols{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-top:.5rem}
+.nb-col-label{font-size:12px;color:var(--muted);font-weight:700;margin-bottom:.25rem;text-transform:uppercase;letter-spacing:.05em}
+.line{border-bottom:1.5px solid var(--border);height:28px;margin-bottom:3px}
+
+/* FOOTER */
+.footer{text-align:center;padding:2rem 1rem;font-size:12px;color:var(--muted)}
+
+@media(max-width:480px){
+  .split-grid{grid-template-columns:1fr}
+  .nb-cols{grid-template-columns:1fr}
+  .sess-title{font-size:19px}
+  .tab-btn{font-size:12px;padding:.4rem .3rem}
+  .sess-header-img{height:110px}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-title">🧪 Science Workshop I</div>
+  <div class="topbar-sub">Student Guide</div>
+</div>
+
+<div class="sess-nav" id="sessNav"></div>
+<div class="prog-wrap"><div class="prog-fill" id="progFill" style="width:0%"></div></div>
+
+<div class="main" id="mainContent"></div>
+
+<div class="footer">Colegio Teresiano · Prof. Cynthia Tierrasnegras · Science Workshop I 2026</div>
+
+<script>
+const SESSIONS=[
+  {id:1,title:"Science & Materials",dur:"45 min",exam:"Part I Q1–5 · Part II a,b",color:"#1d9e75",
+   img:"https://images.unsplash.com/photo-1532094349884-543bc11b234d?w=900&q=80",emoji:"🧪",
+   concepts:[
+    {title:"What is science?",emoji:"🔬",img:"https://images.unsplash.com/photo-1576319155264-99536e0be1ee?w=60&q=80",
+     body:"Science is the <strong>systematic study of the natural world</strong> based on <strong>observation and evidence</strong>. Not opinions or beliefs — it requires testing, data, and repeatable results.",
+     terms:["observation","evidence","natural world","systematic","phenomena"]},
+    {title:"What is a material?",emoji:"📦",img:"https://images.unsplash.com/photo-1581093804475-577d72e35330?w=60&q=80",
+     body:"A material is <strong>any substance used to make objects</strong>. Materials have properties that are either physical or chemical.",
+     table:{cols:["Physical property","Chemical property"],rows:[["Observed without changing the substance","Describes how a substance reacts"],["Density · color · hardness","Reactivity · flammability · corrosion"]]}},
+    {title:"Natural vs synthetic",emoji:"🌿",img:"https://images.unsplash.com/photo-1509316785289-025f5b846b35?w=60&q=80",
+     body:"Materials come from nature or are manufactured by humans.",
+     split:{left:{label:"Natural",color:"#1d9e75",items:["Wood","Cotton","Stone","Wool"]},right:{label:"Synthetic",color:"#185fa5",items:["Plastic","Nylon","Polyester","Acrylic"]}}},
+    {title:"Plastics & microplastics",emoji:"♻️",img:"https://images.unsplash.com/photo-1604187351574-c75ca79f5807?w=60&q=80",
+     body:"Plastic is made mainly of <strong>polymers</strong>. When it breaks down it forms <strong>microplastics</strong> — tiny fragments that contaminate oceans, soil, and food chains.",
+     terms:["polymers","microplastics","contamination","synthetic"]}
+   ],
+   quiz:[
+    {q:"Science can be defined as:",opts:["A system of beliefs without evidence","A systematic study of the natural world based on observation and evidence","A collection of opinions about nature","A way to memorize facts"],ans:1,hint:"✓ Science requires evidence and testing — not beliefs or memorization."},
+    {q:"Which is a physical property of a material?",opts:["Reactivity","Density","Flammability","Corrosion"],ans:1,hint:"✓ Physical properties can be measured without changing the substance."},
+    {q:"Which is an example of a synthetic material?",opts:["Wood","Cotton","Plastic","Stone"],ans:2,hint:"✓ Synthetic = made by humans, not found directly in nature."},
+    {q:"Microplastics are:",opts:["Large plastic containers","Small plastic particles that contaminate the environment","Plastic used in laboratories","Natural biodegradable materials"],ans:1,hint:"✓ Micro = very small. They are a major environmental problem."},
+    {q:"Plastic is mainly made of:",opts:["Metals","Polymers","Minerals","Salt crystals"],ans:1,hint:"✓ Polymers are long chains of molecules — the base of all plastics."}
+   ],
+   notebook:[
+    {task:"Define science in your own words (1–2 sentences). Do not copy — use what you understood.",lines:3},
+    {task:"Write 2 examples of natural materials and 2 synthetic materials from your home or school.",lines:3,cols:["Natural materials","Synthetic materials"]},
+    {task:"For each property, write PHYSICAL or CHEMICAL: Color · Flammability · Density · Reactivity",lines:2},
+    {task:"What are microplastics and why are they a problem? Write 2–3 sentences.",lines:3}
+   ]},
+  {id:2,title:"History of Materials",dur:"45 min",exam:"Part I Q9–10 · Part III A–D",color:"#ba7517",
+   img:"https://images.unsplash.com/photo-1599707367072-cd6ada2bc375?w=900&q=80",emoji:"⚒️",
+   concepts:[
+    {title:"The Stone Age",emoji:"🪨",img:"https://images.unsplash.com/photo-1564769662533-4f00a87b4056?w=60&q=80",
+     body:"Humans used <strong>stone tools</strong> for survival and hunting. Stone (flint, obsidian) was the primary material — the earliest and longest period of human history.",
+     terms:["stone tools","flint","obsidian","hunting","survival"]},
+    {title:"The Bronze Age",emoji:"🛡️",img:"https://images.unsplash.com/photo-1599707367072-cd6ada2bc375?w=60&q=80",
+     body:"Mixing <strong>copper + tin</strong> creates bronze — a stronger alloy. Used for tools, weapons, and objects. A major technological leap.",
+     terms:["bronze","copper","tin","alloy","metallurgy"],example:"💡 Bronze = Copper + Tin → stronger than either metal alone"},
+    {title:"The Iron Age",emoji:"⚔️",img:"https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=60&q=80",
+     body:"Iron was <strong>stronger than bronze</strong> and more widely available. Iron tools allowed societies to build stronger civilizations and expand agriculture.",
+     terms:["iron","smelting","weapons","agriculture","civilization"]},
+    {title:"The Modern Age",emoji:"⚗️",img:"https://images.unsplash.com/photo-1532094349884-543bc11b234d?w=60&q=80",
+     body:"Development of <strong>polymers, plastics, and advanced materials</strong> transformed industry, medicine, and everyday life.",
+     terms:["polymers","plastics","advanced materials","synthetic","industry"]}
+   ],
+   quiz:[
+    {q:"The Bronze Age is characterized by:",opts:["Copper and tin alloys","Iron tools","Plastic materials","Aluminum alloys"],ans:0,hint:"✓ Bronze = copper + tin. This alloy gave the age its name."},
+    {q:"The Iron Age allowed societies to:",opts:["Develop stronger tools and weapons","Discover electricity","Invent plastics","Stop using metals"],ans:0,hint:"✓ Iron is stronger than bronze and changed warfare and agriculture."},
+    {q:"Which age is associated with polymers and plastics?",opts:["Stone Age","Bronze Age","Iron Age","Modern Age"],ans:3,hint:"✓ Plastics and synthetic materials are a modern invention."},
+    {q:"Stone tools were mainly used for:",opts:["Building computers","Survival and hunting","Making plastics","Generating electricity"],ans:1,hint:"✓ Stone Age humans depended on stone for basic survival tasks."}
+   ],
+   notebook:[
+    {task:"Draw a simple timeline of the 4 ages. Write one key material for each age.",lines:4},
+    {task:"In your own words, why was the discovery of bronze important? (2 sentences)",lines:3},
+    {task:"What is an alloy? Give one example from the ages you studied.",lines:2}
+   ]},
+  {id:3,title:"Chemical Bonds",dur:"60 min",exam:"Part I Q11–13 · Part IV (all)",color:"#534ab7",
+   img:"https://images.unsplash.com/photo-1507413245164-6160d8298b31?w=900&q=80",emoji:"⚛️",
+   concepts:[
+    {title:"Ionic bond",emoji:"⚡",img:"https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=60&q=80",
+     body:"Forms when <strong>electrons are transferred</strong> from a metal to a non-metal. One atom loses electrons (becomes +) and the other gains them (becomes −).",
+     terms:["electron transfer","metal","non-metal","positive ion","negative ion"],example:"💡 NaCl — Na gives one electron to Cl → Na⁺ and Cl⁻ attract each other"},
+    {title:"Covalent nonpolar",emoji:"=",img:"https://images.unsplash.com/photo-1507413245164-6160d8298b31?w=60&q=80",
+     body:"<strong>Electrons are shared equally</strong> between two atoms of similar electronegativity. No partial charges form.",
+     terms:["shared electrons","equal sharing","electronegativity","nonpolar"],example:"💡 O₂ — two oxygen atoms share electrons equally"},
+    {title:"Covalent polar",emoji:"↔",img:"https://images.unsplash.com/photo-1628595351029-c2bf17511435?w=60&q=80",
+     body:"<strong>Electrons are shared unequally</strong> due to differences in electronegativity. Creates partial charges (δ+ and δ−).",
+     terms:["unequal sharing","electronegativity","partial charge","dipole"],example:"💡 H₂O — oxygen pulls electrons more strongly than hydrogen"},
+    {title:"Metallic bond",emoji:"🔗",img:"https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=60&q=80",
+     body:"Electrons move freely through a <strong>sea of electrons</strong> surrounding positive metal ions. Explains why metals conduct electricity and are malleable.",
+     terms:["sea of electrons","metal ions","conductivity","malleability"],example:"💡 Fe (iron) — electrons flow freely → good conductor"}
+   ],
+   quiz:[
+    {q:"An ionic bond forms when:",opts:["Atoms share electrons equally","Electrons are transferred between a metal and a non-metal","Two metals combine","Atoms share protons"],ans:1,hint:"✓ Ionic = transfer. One gives, one receives."},
+    {q:"A covalent bond occurs when:",opts:["Electrons are shared between atoms","Electrons are transferred completely","Metals combine with metals","Neutrons are exchanged"],ans:0,hint:"✓ Covalent = sharing. Both atoms hold the electrons together."},
+    {q:"A polar covalent bond occurs when:",opts:["Electrons are shared equally","Electrons are not shared at all","Electrons are shared unequally due to electronegativity","A metal loses electrons"],ans:2,hint:"✓ Polar = unequal sharing due to electronegativity difference."},
+    {q:"What type of bond is in NaCl?",opts:["Covalent polar","Metallic","Ionic","Covalent nonpolar"],ans:2,hint:"✓ Na is a metal, Cl is a non-metal → electron transfer → ionic."},
+    {q:"What type of bond is in O₂?",opts:["Ionic","Covalent nonpolar","Covalent polar","Metallic"],ans:1,hint:"✓ Same element sharing equally = nonpolar covalent."}
+   ],
+   notebook:[
+    {task:"Fill in the bond type for each: NaCl · H₂O · O₂ · Fe · CO₂",lines:3},
+    {task:"In your own words, what is the difference between ionic and covalent bonds?",lines:3},
+    {task:"Why do metals conduct electricity? Relate your answer to metallic bonds.",lines:2}
+   ]},
+  {id:4,title:"Biogeochemical Cycles",dur:"45 min",exam:"Part I Q14–15 · Part II d,e",color:"#3b6d11",
+   img:"https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=900&q=80",emoji:"♻️",
+   concepts:[
+    {title:"The water cycle",emoji:"💧",img:"https://images.unsplash.com/photo-1428592953211-077101b2021b?w=60&q=80",
+     body:"Water moves continuously through <strong>evaporation, condensation, and precipitation</strong>. The sun provides energy for evaporation. Water vapor rises, cools, condenses into clouds, and falls as rain or snow.",
+     terms:["evaporation","condensation","precipitation","transpiration","runoff"]},
+    {title:"The carbon cycle",emoji:"🌿",img:"https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=60&q=80",
+     body:"Carbon moves between <strong>living organisms, the atmosphere, and the oceans</strong>. Plants absorb CO₂ in photosynthesis. Animals release it through respiration.",
+     terms:["photosynthesis","respiration","atmosphere","oceans","fossil fuels"]},
+    {title:"The nitrogen cycle",emoji:"💨",img:"https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=60&q=80",
+     body:"Nitrogen moves through <strong>soil, the atmosphere, and living organisms</strong>. Bacteria fix nitrogen into usable forms. Plants absorb it; animals eat plants.",
+     terms:["nitrogen fixation","bacteria","soil","atmosphere","organisms"]}
+   ],
+   quiz:[
+    {q:"The water cycle includes:",opts:["Evaporation, condensation, and precipitation","Combustion and corrosion","Sublimation and melting of metals","Nuclear reactions"],ans:0,hint:"✓ Water evaporates → condenses → precipitates. That's the cycle."},
+    {q:"The carbon cycle mainly involves movement between:",opts:["Rocks and metals","Living organisms, atmosphere, and oceans","Only plants","Only soil"],ans:1,hint:"✓ Carbon travels between life, air, and water."},
+    {q:"The nitrogen cycle moves nitrogen through:",opts:["Only the ocean","Only plants","Soil, atmosphere, and living organisms","Only the sky"],ans:2,hint:"✓ Nitrogen: air → soil bacteria → plants → animals."},
+    {q:"In the carbon cycle, plants absorb CO₂ through:",opts:["Respiration","Photosynthesis","Evaporation","Nitrogen fixation"],ans:1,hint:"✓ Photosynthesis uses CO₂ + sunlight to make food."}
+   ],
+   notebook:[
+    {task:"Draw a simple diagram of the water cycle with at least 3 labeled steps.",lines:5},
+    {task:"What is nitrogen fixation and why is it important? (2 sentences)",lines:3},
+    {task:"How do humans affect the carbon cycle? Give one example.",lines:2}
+   ]},
+  {id:5,title:"States of Matter & Gas Laws",dur:"60 min",exam:"Part I Q16–21, 27–30 · Part II i",color:"#185fa5",
+   img:"https://images.unsplash.com/photo-1559825481-12a05cc00344?w=900&q=80",emoji:"💨",
+   concepts:[
+    {title:"The four states of matter",emoji:"🧊",img:"https://images.unsplash.com/photo-1559825481-12a05cc00344?w=60&q=80",
+     body:"Matter exists in four states: <strong>solid, liquid, gas, and plasma</strong>. Each has different particle arrangement and energy.",
+     table:{cols:["State","Shape","Volume","Example"],rows:[["Solid","Definite","Definite","Ice, rock"],["Liquid","No fixed shape","Definite","Water, juice"],["Gas","No fixed shape","No fixed volume","Air, steam"],["Plasma","No fixed shape","No fixed volume","Stars, lightning"]]}},
+    {title:"Properties of gases",emoji:"💨",img:"https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=60&q=80",
+     body:"Gas particles <strong>move freely and are far apart</strong>. This makes gases compressible and able to expand to fill any container.",
+     terms:["pressure","volume","temperature","diffusion","compressible"]},
+    {title:"Boyle's Law",emoji:"↔",img:"https://images.unsplash.com/photo-1532094349884-543bc11b234d?w=60&q=80",
+     body:"At constant temperature: <strong>pressure ↑ → volume ↓</strong>. Pressure and volume are inversely proportional.",
+     example:"💡 Squeezing a balloon: more pressure → smaller volume"},
+    {title:"Charles's Law",emoji:"🌡️",img:"https://images.unsplash.com/photo-1507413245164-6160d8298b31?w=60&q=80",
+     body:"At constant pressure: <strong>temperature ↑ → volume ↑</strong>. Temperature and volume are directly proportional.",
+     example:"💡 Hot air balloon: heating air → air expands → balloon rises"},
+    {title:"Diffusion",emoji:"〰️",img:"https://images.unsplash.com/photo-1576319155264-99536e0be1ee?w=60&q=80",
+     body:"Movement of particles from <strong>high concentration to low concentration</strong>. Gas particles spread until evenly distributed.",
+     example:"💡 Perfume spreading across a room — particles move from the bottle outward"}
+   ],
+   quiz:[
+    {q:"Which state of matter has a definite shape and volume?",opts:["Gas","Plasma","Liquid","Solid"],ans:3,hint:"✓ Solids have tightly packed particles that keep their shape."},
+    {q:"Which has no definite shape but has definite volume?",opts:["Liquid","Gas","Plasma","Solid"],ans:0,hint:"✓ Liquid takes the shape of its container but the amount stays the same."},
+    {q:"In Boyle's Law, when pressure increases, volume:",opts:["Increases","Decreases","Temperature increases","Mass changes"],ans:1,hint:"✓ Boyle: pressure and volume go in opposite directions."},
+    {q:"In Charles's Law, when temperature increases:",opts:["Volume increases","Pressure decreases","Mass disappears","Compressibility stops"],ans:0,hint:"✓ Charles: temperature and volume go in the same direction."},
+    {q:"Which example represents diffusion?",opts:["Ice melting","Perfume spreading in a room","Water boiling","A balloon shrinking"],ans:1,hint:"✓ Diffusion = particles spreading from high to low concentration."},
+    {q:"Plasma is commonly found in:",opts:["Rocks","Stars","Rivers","Ice cubes"],ans:1,hint:"✓ Plasma is a high-energy state — the sun and stars are made of plasma."}
+   ],
+   notebook:[
+    {task:"Draw and label the 4 states of matter. For each, describe particle arrangement in one word.",lines:4},
+    {task:"Explain Boyle's Law in your own words and give a real-life example.",lines:3},
+    {task:"Why can gases be squeezed more easily than solids? Use particle theory.",lines:3}
+   ]},
+  {id:6,title:"Types of Energy",dur:"45 min",exam:"Part I Q22–26, 31–32 · Part III E–L",color:"#d85a30",
+   img:"https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?w=900&q=80",emoji:"⚡",
+   concepts:[
+    {title:"Kinetic vs potential energy",emoji:"🏃",img:"https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?w=60&q=80",
+     body:"<strong>Kinetic energy</strong> is the energy of movement. <strong>Potential energy</strong> is stored energy — waiting to be released.",
+     split:{left:{label:"Kinetic",color:"#d85a30",items:["A moving car","A flying ball","Running water","Wind"]},right:{label:"Potential",color:"#534ab7",items:["Book on a shelf","Stretched spring","Water behind a dam","A battery"]}}},
+    {title:"Types of energy",emoji:"⚡",img:"https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?w=60&q=80",
+     body:"Energy comes in many forms and can be converted from one to another.",
+     table:{cols:["Type","Definition","Example"],rows:[["Thermal","Energy related to heat","Hot stove, body heat"],["Electrical","Moving electric charges","Light bulb, charger"],["Chemical","Stored in substances","Food, batteries, fuel"],["Sound","Energy from vibrations","Music, thunder"],["Radiant","Travels as light waves","Sunlight, X-rays"],["Nuclear","Stored in atomic nucleus","Nuclear power, sun"],["Mechanical","Kinetic + potential","Bicycle, pendulum"]]}}
+   ],
+   quiz:[
+    {q:"Which type of energy is stored energy?",opts:["Kinetic","Thermal","Potential","Sound"],ans:2,hint:"✓ Potential = stored, waiting to be used."},
+    {q:"A moving bicycle mainly has:",opts:["Chemical energy","Mechanical energy","Nuclear energy","Thermal energy"],ans:1,hint:"✓ Mechanical = combination of motion and position."},
+    {q:"Which type of energy is produced by vibrations?",opts:["Sound energy","Electrical energy","Light energy","Chemical energy"],ans:0,hint:"✓ Sound is made by vibrating particles — that's how it travels."},
+    {q:"Batteries mainly store:",opts:["Nuclear energy","Mechanical energy","Chemical energy","Sound energy"],ans:2,hint:"✓ Batteries store energy in chemical form, releasing it as electricity."},
+    {q:"Which example shows thermal energy?",opts:["A flashlight","A hot stove","A battery","A radio"],ans:1,hint:"✓ Thermal = heat. A hot stove radiates thermal energy."}
+   ],
+   notebook:[
+    {task:"List all 7 types of energy and write one real-life example for each.",lines:5},
+    {task:"Write one example of kinetic energy in your daily life. Describe why it is kinetic.",lines:2},
+    {task:"Which type of energy do you use the most? Why? (2–3 sentences)",lines:3}
+   ]},
+  {id:7,title:"Physical vs Chemical Changes",dur:"45 min",exam:"Part I Q29 · Part V (all)",color:"#993556",
+   img:"https://images.unsplash.com/photo-1567427017947-545c5f8d16ad?w=900&q=80",emoji:"🔥",
+   concepts:[
+    {title:"Physical changes",emoji:"✂️",img:"https://images.unsplash.com/photo-1581093804475-577d72e35330?w=60&q=80",
+     body:"A <strong>physical change</strong> alters form or appearance but does NOT change chemical composition. The substance stays the same.",
+     terms:["form","appearance","reversible","no new substance","state change"],
+     example:"💡 Melting ice → still H₂O. Crushing a can → still aluminum."},
+    {title:"Chemical changes",emoji:"🔥",img:"https://images.unsplash.com/photo-1567427017947-545c5f8d16ad?w=60&q=80",
+     body:"A <strong>chemical change</strong> produces a new substance. Signs: color change, gas produced, energy released, new smell, irreversible.",
+     terms:["new substance","irreversible","reaction","energy","combustion"],
+     example:"💡 Baking a cake → new substances. Vinegar + baking soda → CO₂ gas."},
+    {title:"Quick reference",emoji:"📋",img:"https://images.unsplash.com/photo-1532094349884-543bc11b234d?w=60&q=80",
+     body:"How to tell them apart:",
+     table:{cols:["Physical","Chemical"],rows:[["Shape/size changes","New substance forms"],["State changes (melting)","Color change (no mixing)"],["Usually reversible","Gas produced (bubbles)"],["No new smell","New smell appears"]]}}
+   ],
+   quiz:[
+    {q:"Melting ice is an example of:",opts:["Chemical change","Nuclear change","Physical change","Combustion"],ans:2,hint:"✓ Ice melting is still H₂O — no new substance forms."},
+    {q:"Melting chocolate is:",opts:["Chemical change","Physical change","Nuclear change","Combustion"],ans:1,hint:"✓ Chocolate melts and can solidify again — same substance."},
+    {q:"Baking a cake is:",opts:["Physical change","Chemical change","State change","Reversible change"],ans:1,hint:"✓ You can't un-bake a cake — new substances formed."},
+    {q:"Mixing vinegar and baking soda is:",opts:["Physical change","Chemical change","Diffusion","Condensation"],ans:1,hint:"✓ Bubbles of CO₂ form → new substance → chemical change."},
+    {q:"Dissolving sugar in water is:",opts:["Chemical change","Physical change","Nuclear change","Combustion"],ans:1,hint:"✓ Sugar can be recovered by evaporating water — still sugar."}
+   ],
+   notebook:[
+    {task:"Classify each: Melting chocolate · Crushing a can · Baking a cake · Vinegar + baking soda · Dissolving sugar. Write PHYSICAL or CHEMICAL for each.",lines:3},
+    {task:"Explain in 2 sentences how you know a chemical change has occurred.",lines:2},
+    {task:"Give one example of a physical change and one chemical change from your daily life.",lines:3}
+   ]},
+  {id:8,title:"Renewable vs Nonrenewable Energy",dur:"45 min",exam:"Part I Q26 · Part VI Q1,4",color:"#0f6e56",
+   img:"https://images.unsplash.com/photo-1509391366360-2e959784a276?w=900&q=80",emoji:"☀️",
+   concepts:[
+    {title:"Renewable energy",emoji:"☀️",img:"https://images.unsplash.com/photo-1509391366360-2e959784a276?w=60&q=80",
+     body:"<strong>Renewable energy</strong> comes from sources that are naturally replenished and will not run out. Little or no pollution.",
+     terms:["replenished","sustainable","clean energy","infinite","low pollution"],
+     split:{left:{label:"Types",color:"#1d9e75",items:["Solar (sun)","Wind","Hydroelectric","Geothermal","Biomass"]},right:null}},
+    {title:"Nonrenewable energy",emoji:"🏭",img:"https://images.unsplash.com/photo-1565043589221-1a6fd9ae45c7?w=60&q=80",
+     body:"<strong>Nonrenewable energy</strong> takes millions of years to form and will eventually run out. Burning releases CO₂ and causes pollution.",
+     terms:["fossil fuels","finite","pollution","CO₂","nonrenewable"],
+     split:{left:{label:"Types",color:"#d85a30",items:["Coal","Oil (petroleum)","Natural gas","Nuclear fuel (uranium)"]},right:null}},
+    {title:"Comparison",emoji:"⚖️",img:"https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?w=60&q=80",
+     body:"Key differences between the two types:",
+     table:{cols:["","Renewable","Nonrenewable"],rows:[["Runs out?","No","Yes"],["Pollution","Little or none","High (CO₂)"],["Examples","Solar, wind, hydro","Coal, oil, gas"],["Environmental impact","Low","High"]]}}
+   ],
+   quiz:[
+    {q:"Which energy source causes more environmental pollution?",opts:["Wind energy","Fossil fuels","Hydroelectric energy","Solar panels"],ans:1,hint:"✓ Fossil fuels release CO₂ and other pollutants when burned."},
+    {q:"Which is a renewable energy source?",opts:["Coal","Natural gas","Solar energy","Oil"],ans:2,hint:"✓ The sun will not run out — solar is renewable."},
+    {q:"One difference between renewable and nonrenewable energy:",opts:["Renewable runs out; nonrenewable does not","Nonrenewable causes more pollution","Renewable is always cheaper","Nonrenewable comes from the sun"],ans:1,hint:"✓ Burning fossil fuels releases CO₂ — renewable sources don't."},
+    {q:"Which application involves chemical changes?",opts:["Solar cells","Combustion engines","Ice melting","Windmills only"],ans:1,hint:"✓ Combustion = burning fuel = chemical change → energy released."}
+   ],
+   notebook:[
+    {task:"Write one difference between renewable and nonrenewable energy in your own words.",lines:2},
+    {task:"List 3 renewable and 3 nonrenewable energy sources.",lines:3},
+    {task:"Which type of energy do you think Mexico should use more? Why? (3 sentences)",lines:3}
+   ]}
+];
+
+let curSess=0;
+const scores={};
+const answered={};
+
+function buildNav(){
+  const nav=document.getElementById('sessNav');
+  SESSIONS.forEach((s,i)=>{
+    const btn=document.createElement('button');
+    btn.className='snav-btn'+(i===0?' active':'');
+    btn.textContent=`${s.emoji} ${s.id}. ${s.title}`;
+    if(i===0){btn.style.background=s.color;btn.style.borderColor=s.color;}
+    btn.onclick=()=>loadSession(i);
+    nav.appendChild(btn);
+  });
+}
+
+function loadSession(idx){
+  curSess=idx;
+  const s=SESSIONS[idx];
+  if(!scores[idx])scores[idx]={correct:0,total:s.quiz.length,answered:0};
+  if(!answered[idx])answered[idx]={};
+
+  document.querySelectorAll('.snav-btn').forEach((btn,i)=>{
+    btn.classList.toggle('active',i===idx);
+    btn.style.background=i===idx?s.color:'';
+    btn.style.borderColor=i===idx?s.color:'';
+    btn.style.color=i===idx?'#fff':'';
+  });
+
+  updateProgress(idx);
+
+  const main=document.getElementById('mainContent');
+  main.innerHTML=`
+    <div class="sess-header" style="border-color:${s.color}40">
+      <img src="${s.img}" class="sess-header-img" alt="${s.title}" onerror="this.style.display='none'" loading="lazy">
+      <div class="sess-header-body" style="background:${s.color}10">
+        <div class="sess-eyebrow" style="color:${s.color}">Session ${s.id} of ${SESSIONS.length} · ${s.dur}</div>
+        <div class="sess-title">${s.emoji} ${s.title}</div>
+        <div class="sess-meta">${s.exam}</div>
+      </div>
+    </div>
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab('review',this,${idx})">📖 Review</button>
+      <button class="tab-btn" onclick="switchTab('practice',this,${idx})">✏️ Practice</button>
+      <button class="tab-btn" onclick="switchTab('notebook',this,${idx})">📓 Notebook</button>
+    </div>
+    <div id="pane-review-${idx}" class="tab-pane active">${buildReview(s)}</div>
+    <div id="pane-practice-${idx}" class="tab-pane">${buildPractice(s,idx)}</div>
+    <div id="pane-notebook-${idx}" class="tab-pane">${buildNotebook(s)}</div>
+  `;
+  restoreAnswers(idx);
+}
+
+function switchTab(name,btn,idx){
+  document.querySelectorAll(`[id^="pane-"][id$="-${idx}"]`).forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById(`pane-${name}-${idx}`).classList.add('active');
+  btn.classList.add('active');
+}
+
+function buildReview(s){
+  return s.concepts.map(c=>{
+    let inner=`<div class="card-body">${c.body}</div>`;
+    if(c.terms)inner+=`<div class="terms">${c.terms.map(t=>`<span class="term" style="background:${s.color}12;color:${s.color};border-color:${s.color}40">${t}</span>`).join('')}</div>`;
+    if(c.example)inner+=`<div class="example" style="border-color:${s.color}">${c.example}</div>`;
+    if(c.split){
+      const L=c.split.left,R=c.split.right;
+      inner+=`<div class="split-grid">
+        <div class="split-col" style="background:${L.color}12;border-color:${L.color}40">
+          <div class="split-label" style="color:${L.color}">${L.label}</div>
+          ${L.items.map(i=>`<div class="split-item">· ${i}</div>`).join('')}
+        </div>
+        ${R?`<div class="split-col" style="background:${R.color}12;border-color:${R.color}40">
+          <div class="split-label" style="color:${R.color}">${R.label}</div>
+          ${R.items.map(i=>`<div class="split-item">· ${i}</div>`).join('')}
+        </div>`:''}
+      </div>`;
+    }
+    if(c.table)inner+=`<div class="tbl-wrap"><table><tr>${c.table.cols.map(col=>`<th>${col}</th>`).join('')}</tr>${c.table.rows.map(row=>`<tr>${row.map(cell=>`<td>${cell}</td>`).join('')}</tr>`).join('')}</table></div>`;
+    return`<div class="card">
+      <div class="card-title"><img src="${c.img}" alt="" onerror="this.style.display='none'" loading="lazy" style="width:28px;height:28px;object-fit:cover;border-radius:6px;opacity:.85;flex-shrink:0"><span style="color:${s.color}">${c.emoji} ${c.title}</span></div>
+      ${inner}
+    </div>`;
+  }).join('');
+}
+
+function buildPractice(s,idx){
+  const bar=`<div class="score-bar">
+    <div class="score-icon">🏆</div>
+    <div>
+      <div class="score-label">Practice score</div>
+      <div class="score-val" id="score-${idx}">Answer questions to see your score</div>
+    </div>
+  </div>`;
+  const qs=s.quiz.map((q,qi)=>`
+    <div class="q-block">
+      <div class="q-num">Question ${qi+1} of ${s.quiz.length}</div>
+      <div class="q-text">${q.q}</div>
+      <div class="opts" id="opts-${idx}-${qi}">
+        ${q.opts.map((o,oi)=>`<button class="opt" onclick="checkAns(${idx},${qi},${oi})" id="opt-${idx}-${qi}-${oi}">${o}</button>`).join('')}
+      </div>
+      <div class="hint" id="hint-${idx}-${qi}"></div>
+    </div>
+    ${qi<s.quiz.length-1?'<hr class="q-sep">':''}
+  `).join('');
+  return bar+`<div class="card">${qs}</div>`;
+}
+
+function buildNotebook(s){
+  return s.notebook.map((nb,ni)=>{
+    let lines='';
+    if(nb.cols){
+      lines=`<div class="nb-cols">${nb.cols.map(col=>`<div><div class="nb-col-label">${col}</div>${Array(2).fill('<div class="line"></div>').join('')}</div>`).join('')}</div>`;
+    } else {
+      lines=Array(nb.lines).fill('<div class="line"></div>').join('');
+    }
+    return`<div class="nb-block">
+      <div class="nb-num">Task ${ni+1}</div>
+      <div class="nb-task">${nb.task}</div>
+      ${lines}
+    </div>`;
+  }).join('');
+}
+
+function checkAns(idx,qi,oi){
+  if(answered[idx][qi]!==undefined)return;
+  answered[idx][qi]=oi;
+  const s=SESSIONS[idx];
+  const correct=oi===s.quiz[qi].ans;
+  if(correct)scores[idx].correct++;
+  scores[idx].answered++;
+
+  document.querySelectorAll(`#opts-${idx}-${qi} .opt`).forEach(b=>b.disabled=true);
+  document.getElementById(`opt-${idx}-${qi}-${oi}`).classList.add(correct?'correct':'wrong');
+  if(!correct)document.getElementById(`opt-${idx}-${qi}-${s.quiz[qi].ans}`).classList.add('correct');
+
+  const hint=document.getElementById(`hint-${idx}-${qi}`);
+  hint.textContent=s.quiz[qi].hint;
+  hint.className='hint show '+(correct?'ok':'no');
+
+  updateProgress(idx);
+  const sc=scores[idx];
+  const sdEl=document.getElementById(`score-${idx}`);
+  if(sdEl){
+    sdEl.textContent=sc.answered===sc.total
+      ?`${sc.correct} / ${sc.total} correct (${Math.round(sc.correct/sc.total*100)}%)`
+      :`${sc.answered} of ${sc.total} answered`;
+  }
+}
+
+function restoreAnswers(idx){
+  if(!answered[idx])return;
+  Object.entries(answered[idx]).forEach(([qi,oi])=>{
+    const s=SESSIONS[idx];
+    const q=s.quiz[qi];
+    document.querySelectorAll(`#opts-${idx}-${qi} .opt`).forEach(b=>b.disabled=true);
+    const chosen=document.getElementById(`opt-${idx}-${qi}-${oi}`);
+    if(chosen)chosen.classList.add(parseInt(oi)===q.ans?'correct':'wrong');
+    if(parseInt(oi)!==q.ans){
+      const corr=document.getElementById(`opt-${idx}-${qi}-${q.ans}`);
+      if(corr)corr.classList.add('correct');
+    }
+    const hint=document.getElementById(`hint-${idx}-${qi}`);
+    if(hint){hint.textContent=q.hint;hint.className='hint show '+(parseInt(oi)===q.ans?'ok':'no');}
+  });
+  const sc=scores[idx];
+  if(sc&&sc.answered>0){
+    const sdEl=document.getElementById(`score-${idx}`);
+    if(sdEl)sdEl.textContent=sc.answered===sc.total
+      ?`${sc.correct} / ${sc.total} correct (${Math.round(sc.correct/sc.total*100)}%)`
+      :`${sc.answered} of ${sc.total} answered`;
+  }
+}
+
+function updateProgress(idx){
+  const sc=scores[idx];
+  if(!sc)return;
+  const pct=Math.round(sc.answered/sc.total*100);
+  const fill=document.getElementById('progFill');
+  fill.style.width=pct+'%';
+  fill.style.background=SESSIONS[idx].color;
+}
+
+buildNav();
+loadSession(0);
+</script>
+</body>
+</html>
