@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Taller de Ciencias I — Guía del Estudiante</title>
+<style>
+:root{
+  --bg:#f7f9f7;
+  --surface:#ffffff;
+  --surface2:#eef2ee;
+  --border:#dde4dd;
+  --text:#1a2e1a;
+  --muted:#5a6b5a;
+  --r:14px;--rs:9px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:17px}
+
+/* TOP BAR */
+.topbar{background:var(--surface);border-bottom:2px solid var(--border);padding:.75rem 1rem;position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between}
+.topbar-title{font-size:17px;font-weight:800;color:var(--text)}
+.topbar-sub{font-size:13px;color:var(--muted);font-weight:600}
+
+/* SESSION NAV */
+.sess-nav{display:flex;gap:7px;padding:.85rem 1rem;overflow-x:auto;background:var(--surface);border-bottom:2px solid var(--border);scrollbar-width:none}
+.sess-nav::-webkit-scrollbar{display:none}
+.snav-btn{flex-shrink:0;padding:.42rem 1rem;border-radius:20px;border:2px solid var(--border);background:transparent;font-size:14px;font-weight:700;color:var(--muted);cursor:pointer;transition:all .18s;white-space:nowrap}
+.snav-btn.active{color:#fff;border-color:transparent}
+
+/* PROGRESS */
+.prog-wrap{height:6px;background:var(--border)}
+.prog-fill{height:100%;transition:width .3s}
+
+/* MAIN */
+.main{max-width:680px;margin:0 auto;padding:1rem}
+
+/* SESSION HEADER */
+.sess-header{border-radius:var(--r);overflow:hidden;margin-bottom:1.1rem;border:2px solid var(--border)}
+.sess-header-img{width:100%;height:130px;object-fit:cover;object-position:center;display:block}
+.sess-header-body{padding:.9rem 1.1rem}
+.sess-num{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.09em;margin-bottom:.25rem}
+.sess-title{font-size:24px;font-weight:900;margin-bottom:.4rem}
+.sess-steps{display:flex;gap:6px;flex-wrap:wrap;margin-top:.35rem}
+.sess-step{font-size:13px;font-weight:700;padding:5px 12px;border-radius:20px;border:2px solid;display:flex;align-items:center;gap:5px}
+
+/* STEP TABS — large, clear */
+.tabs{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:1.1rem}
+.tab-btn{padding:.65rem .5rem;border:2px solid var(--border);background:var(--surface);font-size:15px;font-weight:700;color:var(--muted);border-radius:var(--rs);cursor:pointer;transition:all .15s;text-align:center;line-height:1.3}
+.tab-btn.active{color:#fff;border-color:transparent}
+.tab-pane{display:none}
+.tab-pane.active{display:block}
+
+/* WORD BANK — always visible in practice and review */
+.word-bank{background:#fffbea;border:2px solid #e8c840;border-radius:var(--r);padding:.85rem 1rem;margin-bottom:1rem}
+.wb-label{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#7a6000;margin-bottom:.5rem}
+.wb-words{display:flex;flex-wrap:wrap;gap:6px}
+.wb-word{font-size:14px;font-weight:700;padding:4px 12px;background:#fff;border:2px solid #e8c840;border-radius:20px;color:#5a4400}
+
+/* CONCEPT CARDS — simplified */
+.concept-card{background:var(--surface);border:2px solid var(--border);border-radius:var(--r);padding:1.1rem 1.15rem;margin-bottom:.85rem}
+.concept-num{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;margin-bottom:.3rem}
+.concept-title{font-size:20px;font-weight:800;margin-bottom:.65rem;display:flex;align-items:center;gap:8px}
+.concept-title img{width:30px;height:30px;object-fit:cover;border-radius:7px;flex-shrink:0}
+
+/* DEFINITION BOX */
+.def-box{background:var(--surface2);border-left:4px solid;border-radius:0 var(--rs) var(--rs) 0;padding:.8rem 1rem;margin-bottom:.75rem}
+.def-label{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;margin-bottom:.3rem;opacity:.7}
+.def-text{font-size:17px;line-height:1.6;font-weight:500}
+.def-text strong{font-weight:800}
+
+/* EXAMPLE BOX */
+.ex-box{background:#f0f9f4;border:2px solid #1d9e7540;border-radius:var(--rs);padding:.75rem 1rem;margin-bottom:.75rem}
+.ex-label{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#0f6e56;margin-bottom:.3rem}
+.ex-text{font-size:16px;font-weight:600;color:#0f6e56;line-height:1.5}
+
+/* NOT / YES comparison */
+.compare{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:.75rem}
+.compare-col{border-radius:var(--rs);padding:.75rem .9rem;border:2px solid}
+.compare-label{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.07em;margin-bottom:.45rem}
+.compare-item{font-size:15px;padding:3px 0;font-weight:500;line-height:1.4}
+
+/* TABLE */
+.tbl-wrap{overflow-x:auto;margin-bottom:.75rem}
+table{width:100%;border-collapse:collapse;font-size:15px}
+th{background:var(--surface2);padding:.5rem .7rem;text-align:left;font-weight:800;font-size:13px;border-bottom:2px solid var(--border);color:var(--muted)}
+td{padding:.45rem .7rem;border-bottom:1.5px solid var(--border);vertical-align:top;line-height:1.45;font-weight:500}
+tr:last-child td{border-bottom:none}
+
+/* QUIZ — large tap targets */
+.score-bar{background:var(--surface);border:2px solid var(--border);border-radius:var(--r);padding:.85rem 1.1rem;margin-bottom:.85rem;display:flex;align-items:center;gap:12px}
+.score-icon{font-size:26px}
+.score-label{font-size:14px;color:var(--muted);font-weight:600}
+.score-val{font-size:20px;font-weight:800}
+.q-block{margin-bottom:1rem}
+.q-num{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:.4rem}
+.q-text{font-size:17px;font-weight:700;line-height:1.5;margin-bottom:.75rem}
+.opts{display:flex;flex-direction:column;gap:9px}
+.opt{background:var(--surface2);border:2px solid var(--border);border-radius:var(--rs);padding:.75rem 1rem;text-align:left;font-size:16px;font-weight:600;color:var(--text);cursor:pointer;transition:all .15s;line-height:1.4;width:100%}
+.opt:hover:not(:disabled){border-color:#9ca3af;background:#f0f2f0}
+.opt.correct{background:#e1f5ee;border-color:#1d9e75;color:#085041}
+.opt.wrong{background:#fee2e2;border-color:#ef4444;color:#7f1d1d}
+.opt:disabled{cursor:default}
+.hint{font-size:15px;margin-top:.5rem;padding:.55rem .85rem;border-radius:var(--rs);display:none;line-height:1.5;font-weight:600}
+.hint.show{display:block}
+.hint.ok{background:#e1f5ee;color:#085041;border:1.5px solid #1d9e75}
+.hint.no{background:#fee2e2;color:#7f1d1d;border:1.5px solid #ef4444}
+.q-sep{border:none;border-top:2px solid var(--border);margin:1rem 0}
+
+/* NOTEBOOK — step by step */
+.step-intro{background:var(--surface);border:2px solid var(--border);border-radius:var(--r);padding:1rem 1.15rem;margin-bottom:.85rem}
+.step-intro p{font-size:16px;color:var(--muted);line-height:1.6;font-weight:500}
+.nb-block{background:var(--surface);border:2px dashed var(--border);border-radius:var(--r);padding:1.1rem 1.15rem;margin-bottom:.85rem}
+.nb-step-num{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;font-size:14px;font-weight:800;color:#fff;margin-bottom:.5rem;flex-shrink:0}
+.nb-task{font-size:17px;font-weight:700;color:var(--text);line-height:1.55;margin-bottom:.75rem}
+.nb-cols{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-top:.5rem}
+.nb-col-label{font-size:13px;color:var(--muted);font-weight:700;margin-bottom:.3rem;text-transform:uppercase;letter-spacing:.05em}
+.line{border-bottom:2px solid var(--border);height:30px;margin-bottom:4px}
+.reminder-box{background:#fff8e6;border:2px solid #e8c840;border-radius:var(--rs);padding:.75rem 1rem;margin-top:.75rem}
+.reminder-box p{font-size:14px;color:#7a6000;font-weight:600;line-height:1.5}
+
+/* FOOTER */
+.footer{text-align:center;padding:2rem 1rem;font-size:13px;color:var(--muted);font-weight:500}
+
+@media(max-width:480px){
+  .compare{grid-template-columns:1fr}
+  .nb-cols{grid-template-columns:1fr}
+  .sess-title{font-size:20px}
+  .tab-btn{font-size:13px;padding:.55rem .3rem}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-title">🧪 Taller de Ciencias I</div>
+  <div class="topbar-sub">Guía del Estudiante</div>
+</div>
+
+<div class="sess-nav" id="sessNav"></div>
+<div class="prog-wrap"><div class="prog-fill" id="progFill" style="width:0%"></div></div>
+
+<div class="main" id="mainContent"></div>
+
+<div class="footer">Colegio Teresiano · Prof. Cynthia Tierrasnegras · Taller de Ciencias I 2026</div>
+
+<script>
+const SESSIONS=[
+  {
+    id:1,title:"Ciencia y Materiales",dur:"45 min",color:"#1d9e75",
+    img:"https://images.unsplash.com/photo-1532094349884-543bc11b234d?w=900&q=80",emoji:"🧪",
+    palabras:["observación","evidencia","densidad","reactivo","natural","sintético","polímeros","microplásticos"],
+    conceptos:[
+      {titulo:"¿Qué es la ciencia?",emoji:"🔬",img:"https://images.unsplash.com/photo-1576319155264-99536e0be1ee?w=60&q=80",
+       def:"La ciencia es el <strong>estudio del mundo natural</strong> usando <strong>observación y evidencia</strong>.",
+       ejemplo:"Ejemplo: Un científico observa cómo crece una planta y anota los cambios cada día.",
+       no:"La ciencia NO es una opinión. La ciencia NO es memorizar datos.",
+       si:"La ciencia SÍ necesita pruebas. La ciencia SÍ requiere repetir experimentos."},
+      {titulo:"¿Qué es un material?",emoji:"📦",img:"https://images.unsplash.com/photo-1581093804475-577d72e35330?w=60&q=80",
+       def:"Un material es <strong>cualquier sustancia usada para hacer objetos</strong>.",
+       tabla:{cols:["Propiedad física","Propiedad química"],filas:[["Se mide sin cambiar la sustancia","Describe cómo reacciona la sustancia"],["Ejemplos: color, densidad, dureza","Ejemplos: reactividad, inflamabilidad"]]},
+       ejemplo:"Ejemplo: La densidad del hierro es una propiedad física. La oxidación del hierro es una propiedad química."},
+      {titulo:"Materiales naturales vs sintéticos",emoji:"🌿",img:"https://images.unsplash.com/photo-1509316785289-025f5b846b35?w=60&q=80",
+       def:"Los materiales pueden venir de la naturaleza o ser fabricados por personas.",
+       comparar:{izq:{label:"Naturales 🌿",color:"#1d9e75",items:["Madera","Algodón","Piedra","Lana"]},der:{label:"Sintéticos 🏭",color:"#185fa5",items:["Plástico","Nylon","Poliéster","Acrílico"]}}},
+      {titulo:"Plásticos y microplásticos",emoji:"♻️",img:"https://images.unsplash.com/photo-1604187351574-c75ca79f5807?w=60&q=80",
+       def:"El plástico está hecho principalmente de <strong>polímeros</strong>. Cuando se rompe en pedazos muy pequeños, forma <strong>microplásticos</strong>.",
+       ejemplo:"Ejemplo: Una botella de plástico tirada en el mar se rompe en pedacitos muy pequeños. Esos pedacitos son microplásticos y contaminan el océano."}
+    ],
+    quiz:[
+      {q:"La ciencia se puede definir como:",opts:["Un sistema de creencias sin pruebas","El estudio del mundo natural basado en observación y evidencia","Una colección de opiniones sobre la naturaleza","Una forma de memorizar datos"],ans:1,ok:"✓ Correcto. La ciencia necesita observación y evidencia.",no:"Esa no es la respuesta. La ciencia necesita pruebas y observación."},
+      {q:"¿Cuál de estas es una propiedad FÍSICA de un material?",opts:["Reactividad","Densidad","Inflamabilidad","Corrosión"],ans:1,ok:"✓ Correcto. La densidad se mide sin cambiar la sustancia.",no:"Esa no es la respuesta. Piensa: ¿cambia la sustancia al medirla?"},
+      {q:"¿Cuál de estos es un material SINTÉTICO?",opts:["Madera","Algodón","Plástico","Piedra"],ans:2,ok:"✓ Correcto. El plástico es fabricado por personas.",no:"Esa no es la respuesta. Sintético = hecho por personas, no viene de la naturaleza."},
+      {q:"Los microplásticos son:",opts:["Grandes contenedores de plástico","Pequeñas partículas de plástico que contaminan el ambiente","Plástico usado en laboratorios","Materiales biodegradables naturales"],ans:1,ok:"✓ Correcto. Micro = muy pequeño. Son un problema de contaminación.",no:"Esa no es la respuesta. La palabra clave es: muy pequeños."},
+      {q:"El plástico está hecho principalmente de:",opts:["Metales","Polímeros","Minerales","Cristales de sal"],ans:1,ok:"✓ Correcto. Los polímeros son cadenas largas de moléculas.",no:"Esa no es la respuesta. Recuerda el banco de palabras."}
+    ],
+    cuaderno:[
+      {tarea:"Escribe con tus propias palabras qué es la ciencia. Escribe 1 o 2 oraciones. No copies la definición.",lineas:3},
+      {tarea:"Escribe 2 ejemplos de materiales naturales y 2 ejemplos de materiales sintéticos que encuentres en tu casa o escuela.",lineas:3,cols:["Materiales naturales","Materiales sintéticos"]},
+      {tarea:"Para cada propiedad, escribe FÍSICA o QUÍMICA:\n1. Color →\n2. Inflamabilidad →\n3. Densidad →\n4. Reactividad →",lineas:3},
+      {tarea:"¿Qué son los microplásticos? ¿Por qué son un problema? Escribe 2 oraciones.",lineas:3,recordatorio:"Usa el banco de palabras si necesitas ayuda."}
+    ]
+  },
+  {
+    id:2,title:"Historia de los Materiales",dur:"45 min",color:"#ba7517",
+    img:"https://images.unsplash.com/photo-1599707367072-cd6ada2bc375?w=900&q=80",emoji:"⚒️",
+    palabras:["herramientas","piedra","bronce","cobre","estaño","hierro","aleación","polímeros","sintéticos"],
+    conceptos:[
+      {titulo:"La Edad de Piedra",emoji:"🪨",img:"https://images.unsplash.com/photo-1564769662533-4f00a87b4056?w=60&q=80",
+       def:"Los seres humanos usaban <strong>herramientas de piedra</strong> para sobrevivir y cazar. La piedra fue el material más importante.",
+       ejemplo:"Ejemplo: Usaban piedras afiladas para cortar carne y madera."},
+      {titulo:"La Edad de Bronce",emoji:"🛡️",img:"https://images.unsplash.com/photo-1599707367072-cd6ada2bc375?w=60&q=80",
+       def:"Las personas descubrieron que mezclar <strong>cobre + estaño</strong> crea bronce. El bronce es más fuerte que la piedra.",
+       ejemplo:"Ejemplo: Bronce = Cobre + Estaño → más resistente que cada metal solo."},
+      {titulo:"La Edad de Hierro",emoji:"⚔️",img:"https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=60&q=80",
+       def:"El hierro es <strong>más fuerte que el bronce</strong> y más fácil de encontrar. Cambió la forma de construir civilizaciones.",
+       ejemplo:"Ejemplo: Con herramientas de hierro se podían hacer arados más resistentes para la agricultura."},
+      {titulo:"La Edad Moderna",emoji:"⚗️",img:"https://images.unsplash.com/photo-1532094349884-543bc11b234d?w=60&q=80",
+       def:"Se desarrollaron <strong>polímeros, plásticos y materiales avanzados</strong>. La ciencia y la ingeniería se unieron.",
+       ejemplo:"Ejemplo: Hoy usamos plástico en envases, ropa sintética en nuestras mochilas y medicamentos fabricados en laboratorio."}
+    ],
+    quiz:[
+      {q:"La Edad de Bronce se caracteriza por:",opts:["Aleaciones de cobre y estaño","Herramientas de hierro","Materiales plásticos","Aleaciones de aluminio"],ans:0,ok:"✓ Correcto. Bronce = cobre + estaño.",no:"Esa no es la respuesta. ¿Qué dos metales se mezclan para hacer bronce?"},
+      {q:"La Edad de Hierro permitió a las sociedades:",opts:["Desarrollar herramientas y armas más fuertes","Descubrir la electricidad","Inventar los plásticos","Dejar de usar metales"],ans:0,ok:"✓ Correcto. El hierro es más fuerte que el bronce.",no:"Esa no es la respuesta. Piensa en qué hace el hierro mejor que el bronce."},
+      {q:"¿Qué edad está relacionada con los polímeros y plásticos?",opts:["Edad de Piedra","Edad de Bronce","Edad de Hierro","Edad Moderna"],ans:3,ok:"✓ Correcto. Los plásticos son una invención moderna.",no:"Esa no es la respuesta. ¿En qué época vivimos nosotros?"},
+      {q:"Las herramientas de piedra se usaban principalmente para:",opts:["Construir computadoras","Sobrevivir y cazar","Hacer plásticos","Generar electricidad"],ans:1,ok:"✓ Correcto. En la Edad de Piedra todo dependía de sobrevivir.",no:"Esa no es la respuesta. Piensa en lo que necesita una persona para vivir."}
+    ],
+    cuaderno:[
+      {tarea:"Dibuja una línea del tiempo con las 4 edades en orden. Escribe un material importante de cada edad.",lineas:5},
+      {tarea:"¿Por qué fue importante descubrir el bronce? Escribe 2 oraciones con tus propias palabras.",lineas:3},
+      {tarea:"¿Qué es una aleación? Escribe un ejemplo de las edades que estudiaste.",lineas:2,recordatorio:"Aleación = mezcla de dos o más metales."}
+    ]
+  },
+  {
+    id:3,title:"Enlaces Químicos",dur:"60 min",color:"#534ab7",
+    img:"https://images.unsplash.com/photo-1507413245164-6160d8298b31?w=900&q=80",emoji:"⚛️",
+    palabras:["electrones","transferencia","compartidos","ión","metal","no-metal","electronegatividad","polar","no polar","conductividad"],
+    conceptos:[
+      {titulo:"Enlace iónico",emoji:"⚡",img:"https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=60&q=80",
+       def:"Se forma cuando <strong>los electrones se transfieren</strong> de un metal a un no-metal. Un átomo da electrones y el otro los recibe.",
+       ejemplo:"Ejemplo: NaCl (sal de mesa). El sodio (Na) da un electrón al cloro (Cl). → Na⁺ y Cl⁻ se atraen."},
+      {titulo:"Enlace covalente no polar",emoji:"=",img:"https://images.unsplash.com/photo-1507413245164-6160d8298b31?w=60&q=80",
+       def:"Los <strong>electrones se comparten por igual</strong> entre dos átomos del mismo elemento.",
+       ejemplo:"Ejemplo: O₂. Dos átomos de oxígeno comparten electrones de forma igual."},
+      {titulo:"Enlace covalente polar",emoji:"↔",img:"https://images.unsplash.com/photo-1628595351029-c2bf17511435?w=60&q=80",
+       def:"Los <strong>electrones se comparten de forma desigual</strong> porque un átomo los atrae más que el otro.",
+       ejemplo:"Ejemplo: H₂O (agua). El oxígeno atrae los electrones más fuerte que el hidrógeno."},
+      {titulo:"Enlace metálico",emoji:"🔗",img:"https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=60&q=80",
+       def:"Los electrones se mueven libremente en un <strong>mar de electrones</strong> alrededor de los iones metálicos. Por eso los metales conducen electricidad.",
+       ejemplo:"Ejemplo: Fe (hierro). Sus electrones fluyen libremente → buen conductor de electricidad."}
+    ],
+    quiz:[
+      {q:"Un enlace iónico se forma cuando:",opts:["Los átomos comparten electrones por igual","Los electrones se transfieren entre un metal y un no-metal","Dos metales se combinan","Los átomos comparten protones"],ans:1,ok:"✓ Correcto. Iónico = transferencia. Uno da, el otro recibe.",no:"Esa no es la respuesta. En el enlace iónico los electrones se transfieren, no se comparten."},
+      {q:"Un enlace covalente ocurre cuando:",opts:["Los electrones se comparten entre átomos","Los electrones se transfieren completamente","Los metales se combinan con metales","Se intercambian neutrones"],ans:0,ok:"✓ Correcto. Covalente = compartir electrones.",no:"Esa no es la respuesta. Covalente = compartir."},
+      {q:"Un enlace covalente polar ocurre cuando:",opts:["Los electrones se comparten por igual","Los electrones no se comparten","Los electrones se comparten de forma desigual por diferencia de electronegatividad","Un metal pierde electrones"],ans:2,ok:"✓ Correcto. Polar = compartir desigual por diferencia de electronegatividad.",no:"Esa no es la respuesta. Polar = desigual."},
+      {q:"¿Qué tipo de enlace tiene el NaCl?",opts:["Covalente polar","Metálico","Iónico","Covalente no polar"],ans:2,ok:"✓ Correcto. Na es metal, Cl es no-metal → transferencia → iónico.",no:"Esa no es la respuesta. El Na es metal y el Cl es no-metal. ¿Qué tipo de enlace forman?"},
+      {q:"¿Qué tipo de enlace tiene el O₂?",opts:["Iónico","Covalente no polar","Covalente polar","Metálico"],ans:1,ok:"✓ Correcto. Mismo elemento compartiendo igual = covalente no polar.",no:"Esa no es la respuesta. Son dos átomos iguales. ¿Cómo comparten los electrones?"}
+    ],
+    cuaderno:[
+      {tarea:"Escribe el tipo de enlace para cada uno:\n1. NaCl →\n2. H₂O →\n3. O₂ →\n4. Fe →\n5. CO₂ →",lineas:3},
+      {tarea:"¿Cuál es la diferencia entre un enlace iónico y uno covalente? Escribe 2 oraciones con tus palabras.",lineas:3},
+      {tarea:"¿Por qué los metales conducen electricidad? Relaciona tu respuesta con el enlace metálico.",lineas:2,recordatorio:"Piensa en el mar de electrones."}
+    ]
+  },
+  {
+    id:4,title:"Ciclos Biogeoquímicos",dur:"45 min",color:"#3b6d11",
+    img:"https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=900&q=80",emoji:"♻️",
+    palabras:["evaporación","condensación","precipitación","fotosíntesis","respiración","fijación","atmósfera","suelo","organismos"],
+    conceptos:[
+      {titulo:"El ciclo del agua",emoji:"💧",img:"https://images.unsplash.com/photo-1428592953211-077101b2021b?w=60&q=80",
+       def:"El agua se mueve entre tres lugares: la superficie, el aire y las nubes. Los pasos son: <strong>evaporación → condensación → precipitación</strong>.",
+       ejemplo:"Ejemplo: El sol calienta el mar → el agua se evapora → sube al aire → forma nubes → cae como lluvia."},
+      {titulo:"El ciclo del carbono",emoji:"🌿",img:"https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=60&q=80",
+       def:"El carbono se mueve entre los <strong>seres vivos, la atmósfera y los océanos</strong>. Las plantas absorben CO₂. Los animales lo liberan al respirar.",
+       ejemplo:"Ejemplo: Una planta absorbe CO₂ del aire durante la fotosíntesis. Una vaca come la planta y libera CO₂ al respirar."},
+      {titulo:"El ciclo del nitrógeno",emoji:"💨",img:"https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=60&q=80",
+       def:"El nitrógeno se mueve entre el <strong>suelo, la atmósfera y los seres vivos</strong>. Las bacterias en el suelo convierten el nitrógeno del aire en una forma que las plantas pueden usar.",
+       ejemplo:"Ejemplo: Bacterias en el suelo → fijan nitrógeno → las plantas lo absorben → los animales comen las plantas."}
+    ],
+    quiz:[
+      {q:"El ciclo del agua incluye:",opts:["Evaporación, condensación y precipitación","Combustión y corrosión","Sublimación y fusión de metales","Reacciones nucleares"],ans:0,ok:"✓ Correcto. El agua evapora → condensa → precipita.",no:"Esa no es la respuesta. Piensa en cómo se mueve el agua entre el suelo y el cielo."},
+      {q:"El ciclo del carbono involucra principalmente:",opts:["Rocas y metales","Seres vivos, atmósfera y océanos","Solo las plantas","Solo el suelo"],ans:1,ok:"✓ Correcto. El carbono viaja entre la vida, el aire y el agua.",no:"Esa no es la respuesta. El carbono se mueve entre muchos lugares."},
+      {q:"El ciclo del nitrógeno mueve el nitrógeno a través de:",opts:["Solo el océano","Solo las plantas","Suelo, atmósfera y seres vivos","Solo el cielo"],ans:2,ok:"✓ Correcto. Nitrógeno: aire → bacterias del suelo → plantas → animales.",no:"Esa no es la respuesta. El nitrógeno pasa por varios lugares."},
+      {q:"En el ciclo del carbono, las plantas absorben CO₂ a través de:",opts:["La respiración","La fotosíntesis","La evaporación","La fijación de nitrógeno"],ans:1,ok:"✓ Correcto. La fotosíntesis usa CO₂ + luz solar para hacer alimento.",no:"Esa no es la respuesta. ¿Qué proceso usan las plantas para hacer su alimento?"}
+    ],
+    cuaderno:[
+      {tarea:"Dibuja el ciclo del agua con al menos 3 pasos etiquetados.",lineas:5},
+      {tarea:"¿Qué es la fijación de nitrógeno y por qué es importante? Escribe 2 oraciones.",lineas:3,recordatorio:"Fijación = convertir el nitrógeno del aire en algo que las plantas puedan usar."},
+      {tarea:"¿Cómo afectan los humanos el ciclo del carbono? Da un ejemplo.",lineas:2}
+    ]
+  },
+  {
+    id:5,title:"Estados de la Materia y Leyes de los Gases",dur:"60 min",color:"#185fa5",
+    img:"https://images.unsplash.com/photo-1559825481-12a05cc00344?w=900&q=80",emoji:"💨",
+    palabras:["sólido","líquido","gas","plasma","presión","volumen","temperatura","difusión","compresible"],
+    conceptos:[
+      {titulo:"Los cuatro estados de la materia",emoji:"🧊",img:"https://images.unsplash.com/photo-1559825481-12a05cc00344?w=60&q=80",
+       def:"La materia existe en cuatro estados: <strong>sólido, líquido, gas y plasma</strong>.",
+       tabla:{cols:["Estado","Forma","Volumen","Ejemplo"],filas:[["Sólido","Definida","Definido","Hielo, roca"],["Líquido","No fija","Definido","Agua, jugo"],["Gas","No fija","No fijo","Aire, vapor"],["Plasma","No fija","No fijo","Estrellas, rayos"]]}},
+      {titulo:"Propiedades de los gases",emoji:"💨",img:"https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=60&q=80",
+       def:"Las partículas de gas <strong>se mueven libremente y están muy separadas</strong>. Por eso los gases son compresibles.",
+       ejemplo:"Ejemplo: Puedes comprimir el aire en una llanta porque las partículas tienen espacio entre ellas."},
+      {titulo:"Ley de Boyle",emoji:"↔",img:"https://images.unsplash.com/photo-1532094349884-543bc11b234d?w=60&q=80",
+       def:"Cuando la <strong>presión aumenta → el volumen disminuye</strong>. Son inversamente proporcionales.",
+       ejemplo:"Ejemplo: Aprietas un globo → más presión → el globo se hace más pequeño."},
+      {titulo:"Ley de Charles",emoji:"🌡️",img:"https://images.unsplash.com/photo-1507413245164-6160d8298b31?w=60&q=80",
+       def:"Cuando la <strong>temperatura aumenta → el volumen aumenta</strong>. Son directamente proporcionales.",
+       ejemplo:"Ejemplo: Un globo aerostático: calentar el aire → el aire se expande → el globo sube."},
+      {titulo:"Difusión",emoji:"〰️",img:"https://images.unsplash.com/photo-1576319155264-99536e0be1ee?w=60&q=80",
+       def:"Las partículas se mueven de donde hay <strong>más concentración hacia donde hay menos</strong>.",
+       ejemplo:"Ejemplo: El perfume se riega por el cuarto → las partículas se mueven del frasco hacia el resto del espacio."}
+    ],
+    quiz:[
+      {q:"¿Qué estado de la materia tiene forma y volumen definidos?",opts:["Gas","Plasma","Líquido","Sólido"],ans:3,ok:"✓ Correcto. Los sólidos tienen partículas muy juntas que mantienen su forma.",no:"Esa no es la respuesta. ¿Qué estado mantiene siempre su forma?"},
+      {q:"¿Qué estado no tiene forma fija pero sí tiene volumen definido?",opts:["Líquido","Gas","Plasma","Sólido"],ans:0,ok:"✓ Correcto. El líquido toma la forma del recipiente pero la cantidad no cambia.",no:"Esa no es la respuesta. Piensa: ¿qué pasa cuando pones agua en un vaso?"},
+      {q:"En la Ley de Boyle, cuando la presión aumenta, el volumen:",opts:["Aumenta","Disminuye","La temperatura aumenta","La masa cambia"],ans:1,ok:"✓ Correcto. Boyle: presión y volumen van en direcciones opuestas.",no:"Esa no es la respuesta. En la Ley de Boyle: más presión = ¿más o menos volumen?"},
+      {q:"En la Ley de Charles, cuando la temperatura aumenta:",opts:["El volumen aumenta","La presión disminuye","La masa desaparece","La compresibilidad para"],ans:0,ok:"✓ Correcto. Charles: temperatura y volumen van en la misma dirección.",no:"Esa no es la respuesta. En la Ley de Charles: más temperatura = ¿más o menos volumen?"},
+      {q:"¿Qué ejemplo representa la difusión?",opts:["El hielo se derrite","El perfume se expande por el cuarto","El agua hierve","Un globo se encoge"],ans:1,ok:"✓ Correcto. La difusión = partículas que van de mayor a menor concentración.",no:"Esa no es la respuesta. La difusión es cuando algo se expande por un espacio."},
+      {q:"El plasma se encuentra comúnmente en:",opts:["Las rocas","Las estrellas","Los ríos","Los cubos de hielo"],ans:1,ok:"✓ Correcto. El plasma es un estado de alta energía. El sol y las estrellas son plasma.",no:"Esa no es la respuesta. El plasma necesita muchísima energía. ¿Dónde hay esa energía?"}
+    ],
+    cuaderno:[
+      {tarea:"Dibuja y etiqueta los 4 estados de la materia. Para cada uno escribe cómo están las partículas en una sola palabra.",lineas:5},
+      {tarea:"Explica la Ley de Boyle con tus palabras. Da un ejemplo de tu vida diaria.",lineas:3},
+      {tarea:"¿Por qué los gases se pueden comprimir más fácil que los sólidos? Usa la idea de partículas en tu respuesta.",lineas:3,recordatorio:"Piensa: ¿qué tan juntas están las partículas en cada estado?"}
+    ]
+  },
+  {
+    id:6,title:"Tipos de Energía",dur:"45 min",color:"#d85a30",
+    img:"https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?w=900&q=80",emoji:"⚡",
+    palabras:["cinética","potencial","térmica","eléctrica","química","sonido","radiante","nuclear","mecánica"],
+    conceptos:[
+      {titulo:"Energía cinética vs energía potencial",emoji:"🏃",img:"https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?w=60&q=80",
+       def:"<strong>Energía cinética</strong> = energía del movimiento. <strong>Energía potencial</strong> = energía almacenada, esperando ser usada.",
+       comparar:{izq:{label:"Cinética ⚡",color:"#d85a30",items:["Un carro en movimiento","Una pelota volando","Agua corriendo","El viento"]},der:{label:"Potencial 🔋",color:"#534ab7",items:["Un libro en un estante","Un resorte estirado","Agua detrás de una presa","Una batería"]}}},
+      {titulo:"Tipos de energía",emoji:"⚡",img:"https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?w=60&q=80",
+       def:"La energía viene en muchas formas. Puede convertirse de un tipo a otro.",
+       tabla:{cols:["Tipo","Definición","Ejemplo"],filas:[["Térmica","Relacionada con el calor","Estufa caliente"],["Eléctrica","Cargas eléctricas en movimiento","Foco, cargador"],["Química","Almacenada en sustancias","Comida, baterías, gasolina"],["Sonido","Causada por vibraciones","Música, truenos"],["Radiante","Viaja como ondas de luz","Luz solar, rayos X"],["Nuclear","Almacenada en el núcleo del átomo","Energía nuclear, el sol"],["Mecánica","Cinética + potencial","Bicicleta, péndulo"]]}}
+    ],
+    quiz:[
+      {q:"¿Qué tipo de energía es la energía almacenada?",opts:["Cinética","Térmica","Potencial","Sonido"],ans:2,ok:"✓ Correcto. Potencial = almacenada, esperando ser usada.",no:"Esa no es la respuesta. ¿Qué tipo de energía está guardada?"},
+      {q:"Una bicicleta en movimiento tiene principalmente:",opts:["Energía química","Energía mecánica","Energía nuclear","Energía térmica"],ans:1,ok:"✓ Correcto. Mecánica = combinación de movimiento y posición.",no:"Esa no es la respuesta. Una bicicleta se mueve. ¿Qué energía combina movimiento y posición?"},
+      {q:"¿Qué tipo de energía producen las vibraciones?",opts:["Energía de sonido","Energía eléctrica","Energía luminosa","Energía química"],ans:0,ok:"✓ Correcto. El sonido es producido por partículas que vibran.",no:"Esa no es la respuesta. Piensa: ¿qué produce el sonido?"},
+      {q:"Las baterías almacenan principalmente:",opts:["Energía nuclear","Energía mecánica","Energía química","Energía de sonido"],ans:2,ok:"✓ Correcto. Las baterías guardan energía en forma química.",no:"Esa no es la respuesta. Recuerda: las baterías guardan energía. ¿En qué forma?"},
+      {q:"¿Qué ejemplo muestra energía térmica?",opts:["Una linterna","Una estufa caliente","Una batería","Un radio"],ans:1,ok:"✓ Correcto. Térmica = calor. Una estufa caliente irradia energía térmica.",no:"Esa no es la respuesta. Térmica = calor. ¿Cuál de los ejemplos produce calor?"}
+    ],
+    cuaderno:[
+      {tarea:"Haz una lista con los 7 tipos de energía. Escribe un ejemplo de tu vida diaria para cada uno.",lineas:6},
+      {tarea:"Da un ejemplo de energía cinética en tu vida diaria. Explica por qué es cinética.",lineas:2},
+      {tarea:"¿Qué tipo de energía usas más en tu vida? ¿Por qué? Escribe 2-3 oraciones.",lineas:3}
+    ]
+  },
+  {
+    id:7,title:"Cambios Físicos y Químicos",dur:"45 min",color:"#993556",
+    img:"https://images.unsplash.com/photo-1567427017947-545c5f8d16ad?w=900&q=80",emoji:"🔥",
+    palabras:["físico","químico","reversible","irreversible","sustancia nueva","gas","apariencia","composición"],
+    conceptos:[
+      {titulo:"Cambios físicos",emoji:"✂️",img:"https://images.unsplash.com/photo-1581093804475-577d72e35330?w=60&q=80",
+       def:"Un <strong>cambio físico</strong> cambia la forma o apariencia de la materia. Pero <strong>no cambia</strong> la composición química. La sustancia sigue siendo la misma.",
+       ejemplo:"Ejemplo: El hielo se derrite → sigue siendo H₂O. Aplastar una lata → sigue siendo aluminio.",
+       no:"NO se forma una sustancia nueva. Generalmente ES reversible."},
+      {titulo:"Cambios químicos",emoji:"🔥",img:"https://images.unsplash.com/photo-1567427017947-545c5f8d16ad?w=60&q=80",
+       def:"Un <strong>cambio químico</strong> produce una <strong>sustancia nueva</strong> con propiedades diferentes. Señales: cambio de color, gas producido, olor nuevo, energía liberada.",
+       ejemplo:"Ejemplo: Hornear un pastel → se forman sustancias nuevas. Vinagre + bicarbonato → se produce CO₂ (gas)."},
+      {titulo:"¿Cómo distinguirlos?",emoji:"📋",img:"https://images.unsplash.com/photo-1532094349884-543bc11b234d?w=60&q=80",
+       def:"Usa estas pistas para identificarlos:",
+       tabla:{cols:["Cambio físico","Cambio químico"],filas:[["Cambia la forma o tamaño","Se forma una sustancia nueva"],["Cambia de estado (derretir, congelar)","Cambio de color sin mezcla"],["Generalmente reversible","Se produce gas (burbujas)"],["Sin olor nuevo","Aparece un olor nuevo"]]}}
+    ],
+    quiz:[
+      {q:"Derretir hielo es un ejemplo de:",opts:["Cambio químico","Cambio nuclear","Cambio físico","Combustión"],ans:2,ok:"✓ Correcto. El hielo derretido sigue siendo H₂O. No se forma sustancia nueva.",no:"Esa no es la respuesta. ¿Se forma una sustancia nueva cuando el hielo se derrite?"},
+      {q:"Derretir chocolate es:",opts:["Cambio químico","Cambio físico","Cambio nuclear","Combustión"],ans:1,ok:"✓ Correcto. El chocolate puede volver a solidificarse. Es la misma sustancia.",no:"Esa no es la respuesta. El chocolate se puede volver a endurecer. ¿Eso es físico o químico?"},
+      {q:"Hornear un pastel es:",opts:["Cambio físico","Cambio químico","Cambio de estado","Cambio reversible"],ans:1,ok:"✓ Correcto. No puedes deshornear un pastel. Se formaron sustancias nuevas.",no:"Esa no es la respuesta. ¿Puedes volver a tener los ingredientes originales después de hornear?"},
+      {q:"Mezclar vinagre con bicarbonato es:",opts:["Cambio físico","Cambio químico","Difusión","Condensación"],ans:1,ok:"✓ Correcto. Se producen burbujas de CO₂. Se formó una sustancia nueva.",no:"Esa no es la respuesta. ¿Se producen burbujas? ¿Eso es una señal de cambio físico o químico?"},
+      {q:"Disolver azúcar en agua es:",opts:["Cambio químico","Cambio físico","Cambio nuclear","Combustión"],ans:1,ok:"✓ Correcto. Puedes recuperar el azúcar evaporando el agua. Sigue siendo azúcar.",no:"Esa no es la respuesta. ¿Puedes recuperar el azúcar si evaporas el agua?"}
+    ],
+    cuaderno:[
+      {tarea:"Para cada caso escribe FÍSICO o QUÍMICO:\n1. Derretir chocolate →\n2. Aplastar una lata →\n3. Hornear un pastel →\n4. Vinagre + bicarbonato →\n5. Disolver azúcar en agua →",lineas:3},
+      {tarea:"Explica en 2 oraciones cómo saber que ocurrió un cambio químico.",lineas:2,recordatorio:"Piensa en las señales: burbujas, olor, color, calor..."},
+      {tarea:"Da un ejemplo de cambio físico y uno de cambio químico de tu vida diaria.",lineas:3}
+    ]
+  },
+  {
+    id:8,title:"Energía Renovable y No Renovable",dur:"45 min",color:"#0f6e56",
+    img:"https://images.unsplash.com/photo-1509391366360-2e959784a276?w=900&q=80",emoji:"☀️",
+    palabras:["renovable","no renovable","combustibles fósiles","contaminación","CO₂","solar","eólica","hidroeléctrica","agotable"],
+    conceptos:[
+      {titulo:"Energía renovable",emoji:"☀️",img:"https://images.unsplash.com/photo-1509391366360-2e959784a276?w=60&q=80",
+       def:"La energía renovable viene de fuentes que <strong>no se agotan</strong>. Produce poca o ninguna contaminación.",
+       comparar:{izq:{label:"Tipos ☀️",color:"#1d9e75",items:["Solar (sol)","Eólica (viento)","Hidroeléctrica (agua)","Geotérmica","Biomasa"]},der:null},
+       ejemplo:"Ejemplo: Los paneles solares en los techos usan la luz del sol para producir electricidad. El sol no se acaba."},
+      {titulo:"Energía no renovable",emoji:"🏭",img:"https://images.unsplash.com/photo-1565043589221-1a6fd9ae45c7?w=60&q=80",
+       def:"La energía no renovable viene de fuentes que <strong>se forman en millones de años y se van a acabar</strong>. Al quemarlos se libera CO₂.",
+       comparar:{izq:{label:"Tipos 🏭",color:"#d85a30",items:["Carbón","Petróleo","Gas natural","Combustible nuclear (uranio)"]},der:null},
+       ejemplo:"Ejemplo: La gasolina viene del petróleo. El petróleo tarda millones de años en formarse. Cuando lo usamos todo, no habrá más."},
+      {titulo:"Comparación",emoji:"⚖️",img:"https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?w=60&q=80",
+       def:"Diferencias principales entre los dos tipos:",
+       tabla:{cols:["","Renovable","No renovable"],filas:[["¿Se agota?","No","Sí"],["Contaminación","Poca o ninguna","Alta (CO₂)"],["Ejemplos","Solar, eólica, hídrica","Carbón, petróleo, gas"],["Impacto ambiental","Bajo","Alto"]]}}
+    ],
+    quiz:[
+      {q:"¿Qué fuente de energía causa más contaminación ambiental?",opts:["Energía eólica","Combustibles fósiles","Energía hidroeléctrica","Paneles solares"],ans:1,ok:"✓ Correcto. Los combustibles fósiles liberan CO₂ al quemarse.",no:"Esa no es la respuesta. ¿Qué fuente produce CO₂ y smog cuando la usamos?"},
+      {q:"¿Cuál es una fuente de energía renovable?",opts:["Carbón","Gas natural","Energía solar","Petróleo"],ans:2,ok:"✓ Correcto. El sol no se va a acabar. La energía solar es renovable.",no:"Esa no es la respuesta. Renovable = no se agota. ¿Cuál de estas fuentes no se acaba?"},
+      {q:"Una diferencia entre energía renovable y no renovable es:",opts:["La renovable se agota; la no renovable no","La no renovable causa más contaminación","La renovable siempre es más barata","La no renovable viene del sol"],ans:1,ok:"✓ Correcto. Quemar combustibles fósiles libera CO₂. Las renovables no.",no:"Esa no es la respuesta. Piensa en cuál de los dos tipos contamina más."},
+      {q:"¿Qué aplicación tecnológica involucra cambios químicos?",opts:["Celdas solares","Motores de combustión","Derretir hielo","Solo los molinos de viento"],ans:1,ok:"✓ Correcto. Combustión = quemar combustible = cambio químico → energía.",no:"Esa no es la respuesta. La combustión es un cambio químico. ¿Cuál de estos usa combustión?"}
+    ],
+    cuaderno:[
+      {tarea:"Escribe con tus palabras una diferencia entre energía renovable y no renovable.",lineas:2},
+      {tarea:"Escribe 3 fuentes de energía renovable y 3 no renovables.",lineas:3,cols:["Renovables","No renovables"]},
+      {tarea:"¿Qué tipo de energía crees que México debería usar más? ¿Por qué? Escribe 3 oraciones.",lineas:3,recordatorio:"No hay respuesta incorrecta. Lo importante es que expliques tu razón."}
+    ]
+  }
+];
+
+let curSess=0;
+const scores={};
+const answered={};
+
+function buildNav(){
+  const nav=document.getElementById('sessNav');
+  SESSIONS.forEach((s,i)=>{
+    const btn=document.createElement('button');
+    btn.className='snav-btn'+(i===0?' active':'');
+    btn.textContent=`${s.emoji} ${s.id}. ${s.title}`;
+    if(i===0){btn.style.background=s.color;btn.style.borderColor=s.color;}
+    btn.onclick=()=>loadSession(i);
+    nav.appendChild(btn);
+  });
+}
+
+function loadSession(idx){
+  curSess=idx;
+  const s=SESSIONS[idx];
+  if(!scores[idx])scores[idx]={correct:0,total:s.quiz.length,answered:0};
+  if(!answered[idx])answered[idx]={};
+
+  document.querySelectorAll('.snav-btn').forEach((btn,i)=>{
+    btn.classList.toggle('active',i===idx);
+    btn.style.background=i===idx?s.color:'';
+    btn.style.borderColor=i===idx?s.color:'';
+    btn.style.color=i===idx?'#fff':'';
+  });
+
+  updateProgress(idx);
+
+  const main=document.getElementById('mainContent');
+  main.innerHTML=`
+    <div class="sess-header" style="border-color:${s.color}50">
+      <img src="${s.img}" class="sess-header-img" alt="${s.title}" onerror="this.style.display='none'" loading="lazy">
+      <div class="sess-header-body" style="background:${s.color}12">
+        <div class="sess-num" style="color:${s.color}">Sesión ${s.id} de ${SESSIONS.length} · ${s.dur}</div>
+        <div class="sess-title">${s.emoji} ${s.title}</div>
+        <div class="sess-steps">
+          <div class="sess-step" style="background:${s.color}15;border-color:${s.color}40;color:${s.color}">📖 Paso 1: Aprender</div>
+          <div class="sess-step" style="background:${s.color}15;border-color:${s.color}40;color:${s.color}">✏️ Paso 2: Practicar</div>
+          <div class="sess-step" style="background:${s.color}15;border-color:${s.color}40;color:${s.color}">📓 Paso 3: Cuaderno</div>
+        </div>
+      </div>
+    </div>
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab('aprender',this,${idx})" style="border-color:${s.color}">📖 Paso 1<br>Aprender</button>
+      <button class="tab-btn" onclick="switchTab('practicar',this,${idx})">✏️ Paso 2<br>Practicar</button>
+      <button class="tab-btn" onclick="switchTab('cuaderno',this,${idx})">📓 Paso 3<br>Cuaderno</button>
+    </div>
+    <div id="pane-aprender-${idx}" class="tab-pane active">${buildAprender(s)}</div>
+    <div id="pane-practicar-${idx}" class="tab-pane">${buildPracticar(s,idx)}</div>
+    <div id="pane-cuaderno-${idx}" class="tab-pane">${buildCuaderno(s,idx)}</div>
+  `;
+
+  // set active tab color
+  document.querySelector('.tab-btn.active').style.background=s.color;
+  document.querySelector('.tab-btn.active').style.color='#fff';
+  document.querySelector('.tab-btn.active').style.borderColor=s.color;
+
+  restoreAnswers(idx);
+}
+
+function switchTab(name,btn,idx){
+  const s=SESSIONS[idx];
+  document.querySelectorAll(`[id^="pane-"][id$="-${idx}"]`).forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>{
+    b.classList.remove('active');
+    b.style.background='';b.style.color='';b.style.borderColor=s.color+'40';
+  });
+  document.getElementById(`pane-${name}-${idx}`).classList.add('active');
+  btn.classList.add('active');
+  btn.style.background=s.color;btn.style.color='#fff';btn.style.borderColor=s.color;
+}
+
+function wordBank(s){
+  return`<div class="word-bank">
+    <div class="wb-label">📚 Banco de palabras</div>
+    <div class="wb-words">${s.palabras.map(p=>`<span class="wb-word">${p}</span>`).join('')}</div>
+  </div>`;
+}
+
+function buildAprender(s){
+  let html=wordBank(s);
+  s.conceptos.forEach((c,ci)=>{
+    let inner=`<div class="def-box" style="border-color:${s.color}">
+      <div class="def-label" style="color:${s.color}">📌 Definición</div>
+      <div class="def-text">${c.def}</div>
+    </div>`;
+    if(c.ejemplo)inner+=`<div class="ex-box">
+      <div class="ex-label">💡 Ejemplo</div>
+      <div class="ex-text">${c.ejemplo}</div>
+    </div>`;
+    if(c.no)inner+=`<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:.75rem">
+      <div style="background:#fee2e2;border:2px solid #ef4444;border-radius:var(--rs);padding:.65rem .85rem">
+        <div style="font-size:11px;font-weight:800;text-transform:uppercase;color:#7f1d1d;margin-bottom:.3rem">❌ No es esto</div>
+        <div style="font-size:14px;color:#7f1d1d;font-weight:600;line-height:1.4">${c.no}</div>
+      </div>
+      <div style="background:#e1f5ee;border:2px solid #1d9e75;border-radius:var(--rs);padding:.65rem .85rem">
+        <div style="font-size:11px;font-weight:800;text-transform:uppercase;color:#085041;margin-bottom:.3rem">✓ Sí es esto</div>
+        <div style="font-size:14px;color:#085041;font-weight:600;line-height:1.4">${c.si}</div>
+      </div>
+    </div>`;
+    if(c.comparar){
+      const L=c.comparar.izq,R=c.comparar.der;
+      inner+=`<div class="compare">
+        <div class="compare-col" style="background:${L.color}12;border-color:${L.color}40">
+          <div class="compare-label" style="color:${L.color}">${L.label}</div>
+          ${L.items.map(i=>`<div class="compare-item">· ${i}</div>`).join('')}
+        </div>
+        ${R?`<div class="compare-col" style="background:${R.color}12;border-color:${R.color}40">
+          <div class="compare-label" style="color:${R.color}">${R.label}</div>
+          ${R.items.map(i=>`<div class="compare-item">· ${i}</div>`).join('')}
+        </div>`:''}
+      </div>`;
+    }
+    if(c.tabla)inner+=`<div class="tbl-wrap"><table><tr>${c.tabla.cols.map(col=>`<th>${col}</th>`).join('')}</tr>${c.tabla.filas.map(f=>`<tr>${f.map(cell=>`<td>${cell}</td>`).join('')}</tr>`).join('')}</table></div>`;
+
+    html+=`<div class="concept-card">
+      <div class="concept-num" style="color:${s.color}">Concepto ${ci+1} de ${s.conceptos.length}</div>
+      <div class="concept-title" style="color:${s.color}">
+        <img src="${c.img}" alt="" onerror="this.style.display='none'" loading="lazy">
+        ${c.emoji} ${c.titulo}
+      </div>
+      ${inner}
+    </div>`;
+  });
+  return html;
+}
+
+function buildPracticar(s,idx){
+  const bar=`<div class="score-bar">
+    <div class="score-icon">🏆</div>
+    <div>
+      <div class="score-label">Tu puntaje</div>
+      <div class="score-val" id="score-${idx}">Responde las preguntas para ver tu puntaje</div>
+    </div>
+  </div>`;
+  const wb=wordBank(s);
+  const qs=s.quiz.map((q,qi)=>`
+    <div class="q-block">
+      <div class="q-num">Pregunta ${qi+1} de ${s.quiz.length}</div>
+      <div class="q-text">${q.q}</div>
+      <div class="opts" id="opts-${idx}-${qi}">
+        ${q.opts.map((o,oi)=>`<button class="opt" onclick="checkAns(${idx},${qi},${oi})" id="opt-${idx}-${qi}-${oi}">${o}</button>`).join('')}
+      </div>
+      <div class="hint" id="hint-${idx}-${qi}"></div>
+    </div>
+    ${qi<s.quiz.length-1?'<hr class="q-sep">':''}
+  `).join('');
+  return bar+wb+`<div class="concept-card">${qs}</div>`;
+}
+
+function buildCuaderno(s,idx){
+  const intro=`<div class="step-intro">
+    <p>📓 Estas actividades las haces en tu cuaderno.<br>Lee cada instrucción con calma. Haz una tarea a la vez.</p>
+  </div>`;
+  const wb=wordBank(s);
+  const tareas=s.cuaderno.map((nb,ni)=>{
+    let lines='';
+    if(nb.cols){
+      lines=`<div class="nb-cols">${nb.cols.map(col=>`<div><div class="nb-col-label">${col}</div>${Array(3).fill('<div class="line"></div>').join('')}</div>`).join('')}</div>`;
+    } else {
+      lines=Array(nb.lineas).fill('<div class="line"></div>').join('');
+    }
+    const rec=nb.recordatorio?`<div class="reminder-box"><p>💡 ${nb.recordatorio}</p></div>`:'';
+    return`<div class="nb-block">
+      <div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:.6rem">
+        <div class="nb-step-num" style="background:${s.color}">${ni+1}</div>
+        <div class="nb-task">${nb.tarea.replace(/\n/g,'<br>')}</div>
+      </div>
+      ${rec}
+      <div style="margin-top:.65rem">${lines}</div>
+    </div>`;
+  }).join('');
+  return intro+wb+tareas;
+}
+
+function checkAns(idx,qi,oi){
+  if(answered[idx][qi]!==undefined)return;
+  answered[idx][qi]=oi;
+  const s=SESSIONS[idx];
+  const q=s.quiz[qi];
+  const correct=oi===q.ans;
+  if(correct)scores[idx].correct++;
+  scores[idx].answered++;
+
+  document.querySelectorAll(`#opts-${idx}-${qi} .opt`).forEach(b=>b.disabled=true);
+  document.getElementById(`opt-${idx}-${qi}-${oi}`).classList.add(correct?'correct':'wrong');
+  if(!correct)document.getElementById(`opt-${idx}-${qi}-${q.ans}`).classList.add('correct');
+
+  const hint=document.getElementById(`hint-${idx}-${qi}`);
+  hint.textContent=correct?q.ok:q.no;
+  hint.className='hint show '+(correct?'ok':'no');
+
+  updateProgress(idx);
+  const sc=scores[idx];
+  const sdEl=document.getElementById(`score-${idx}`);
+  if(sdEl){
+    sdEl.textContent=sc.answered===sc.total
+      ?`${sc.correct} / ${sc.total} correctas (${Math.round(sc.correct/sc.total*100)}%)`
+      :`${sc.answered} de ${sc.total} respondidas`;
+  }
+}
+
+function restoreAnswers(idx){
+  if(!answered[idx])return;
+  Object.entries(answered[idx]).forEach(([qi,oi])=>{
+    const s=SESSIONS[idx];const q=s.quiz[qi];
+    document.querySelectorAll(`#opts-${idx}-${qi} .opt`).forEach(b=>b.disabled=true);
+    const chosen=document.getElementById(`opt-${idx}-${qi}-${oi}`);
+    if(chosen)chosen.classList.add(parseInt(oi)===q.ans?'correct':'wrong');
+    if(parseInt(oi)!==q.ans){const corr=document.getElementById(`opt-${idx}-${qi}-${q.ans}`);if(corr)corr.classList.add('correct');}
+    const hint=document.getElementById(`hint-${idx}-${qi}`);
+    if(hint){const correct=parseInt(oi)===q.ans;hint.textContent=correct?q.ok:q.no;hint.className='hint show '+(correct?'ok':'no');}
+  });
+  const sc=scores[idx];
+  if(sc&&sc.answered>0){
+    const sdEl=document.getElementById(`score-${idx}`);
+    if(sdEl)sdEl.textContent=sc.answered===sc.total
+      ?`${sc.correct} / ${sc.total} correctas (${Math.round(sc.correct/sc.total*100)}%)`
+      :`${sc.answered} de ${sc.total} respondidas`;
+  }
+}
+
+function updateProgress(idx){
+  const sc=scores[idx];if(!sc)return;
+  const pct=Math.round(sc.answered/sc.total*100);
+  const fill=document.getElementById('progFill');
+  fill.style.width=pct+'%';fill.style.background=SESSIONS[idx].color;
+}
+
+buildNav();loadSession(0);
+</script>
+</body>
+</html>
